@@ -33,20 +33,24 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid v
 .tabs button.on{color:var(--ink);border-color:var(--sun)}
 #toast{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));max-width:528px;margin:auto;padding:13px 16px;border-radius:10px;background:var(--ink);color:#fff;z-index:9}
 #toast.err{background:var(--bad)}
+.sheet{position:fixed;inset:0;background:rgba(20,33,61,.6);display:flex;z-index:8}
+.sheet>div{background:#fff;width:100%;max-width:560px;margin:auto auto 0;border-radius:16px 16px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}
+.opt{display:flex;gap:8px;font-weight:400;font-size:14px;padding:8px;border:1.5px solid var(--line);border-radius:10px;margin:6px 0}.opt input{width:auto;margin-top:3px}
 </style></head><body>
 
-<section id="auth" class="wrap">
+<section id="auth" class="wrap hide">
   <h1 class="logo" style="font-size:34px;margin:28px 0 6px">Artisan<i>Hub</i></h1>
   <p class="mute" style="margin:0 0 18px">Find skilled people near you, or get found for the work you do.</p>
   <div class="tabs"><button id="tLogin" class="on">Log in</button><button id="tSign">Create account</button></div>
   <label for="em">Email</label><input id="em" type="email" autocomplete="email">
   <label for="pw">Password (at least 6 characters)</label><input id="pw" type="password" autocomplete="current-password">
   <button id="authBtn" class="btn">Log in</button>
+  <button id="aBack" class="btn ghost" type="button">← Back to search</button>
 </section>
 
-<div id="app" class="hide">
+<div id="app">
 <header><div class="wrap"><span class="logo">Artisan<i>Hub</i></span>
-<nav><button id="nFind" class="on">Find</button><button id="nMe">My profile</button><button id="nOut">Log out</button></nav></div></header>
+<nav><button id="nFind" class="on">Find</button><button id="nJoin">Join / Log in</button><button id="nMe" class="hide">My profile</button><button id="nOut" class="hide">Log out</button></nav></div></header>
 
 <main class="wrap">
 <section id="find">
@@ -75,8 +79,15 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid v
   <input id="mOther" class="hide" placeholder="Type your own skill" style="margin-top:8px">
   <div id="mSkills"></div>
   <button id="mSave" class="btn sun">Save profile</button>
+  <button id="mDel" class="btn ghost" style="color:var(--bad);border-color:var(--bad);margin-bottom:24px">Delete my profile</button>
 </section>
 </main></div>
+<div id="mg" class="sheet hide"><div>
+  <h3 id="mgTo">Message</h3><p class="mute" style="margin:4px 0 0">Pick a ready-made message or write your own, then send it on WhatsApp.</p>
+  <div id="mgTpl" style="margin-top:8px"></div>
+  <label for="mgTxt">Your message (you can edit it)</label><textarea id="mgTxt" rows="4"></textarea>
+  <button id="mgGo" class="btn sun">Open WhatsApp</button><button id="mgX" class="btn ghost" type="button">Cancel</button>
+</div></div>
 <div id="toast" class="hide" role="status"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -107,16 +118,21 @@ function view(v){$('find').classList.toggle('hide',v!=='find');$('me').classList
   $('nFind').className=v==='find'?'on':'';$('nMe').className=v==='me'?'on':'';scrollTo(0,0)}
 $('nFind').onclick=()=>{view('find');search()};$('nMe').onclick=()=>view('me');
 
-async function start(user){
-  uid=user.id;$('auth').classList.add('hide');$('app').classList.remove('hide');
+function showAuth(on){$('auth').classList.toggle('hide',!on);$('app').classList.toggle('hide',on)}
+function nav(inn){$('nJoin').classList.toggle('hide',inn);$('nMe').classList.toggle('hide',!inn);$('nOut').classList.toggle('hide',!inn)}
+$('nJoin').onclick=()=>{mode(false);showAuth(true)};$('aBack').onclick=()=>showAuth(false);
+
+async function loadCats(){
   const c=await sb.from('categories').select('id,group_name,name').order('id');
   if(c.error)return toast('Could not load job types. Check your internet.',1);
   cats=c.data;
   const groups=[...new Set(cats.map(x=>x.group_name))];
   const opts=groups.map(g=>`<optgroup label="${esc(g)}">`+cats.filter(x=>x.group_name===g).map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('')+'</optgroup>').join('');
   $('fCat').innerHTML='<option value="">Any type of work</option>'+opts;$('mCat').innerHTML=opts;
-  $('mCat').onchange=()=>$('mOther').classList.toggle('hide',!isOther($('mCat').value));
-  $('mCat').onchange();
+  $('mCat').onchange=()=>$('mOther').classList.toggle('hide',!isOther($('mCat').value));$('mCat').onchange()}
+
+async function start(user){
+  uid=user.id;showAuth(false);nav(true);
   const [p,pd,sk]=await Promise.all([
     sb.from('profiles').select('*').eq('id',uid).maybeSingle(),
     sb.from('private_details').select('home_address').eq('user_id',uid).maybeSingle(),
@@ -128,6 +144,12 @@ async function start(user){
   if(pd.data)$('mAddr').value=pd.data.home_address;
   skills=(sk.data||[]).map(s=>({category_id:s.category_id,other_text:s.other_text}));paintSkills();
   if(hasProfile){view('find');search()}else{view('me');toast('Welcome! Complete your profile to get started.')}}
+
+$('mDel').onclick=async()=>{
+  if(!confirm('Delete your account and profile permanently? This cannot be undone.'))return;
+  await sb.storage.from('avatars').remove([uid+'/avatar.jpg']);
+  const r=await sb.rpc('delete_my_account');if(r.error)return toast('Could not delete: '+r.error.message,1);
+  await sb.auth.signOut();toast('Your account was deleted.');setTimeout(()=>location.reload(),1500)};
 
 /* ---- profile ---- */
 const isOther=id=>(cats.find(c=>c.id==id)||{}).group_name==='Other';
@@ -171,27 +193,36 @@ $('mSave').onclick=async()=>{
   }catch(e){toast(e.code==='23505'?'That username is taken. Try another.':'Could not save ('+step+'): '+(e.message||'try again'),1)}
   $('mSave').disabled=false};
 
-/* ---- search ---- */
+/* ---- search (public) ---- */
+let P=[],cur=null;
+const TPL=[(n,k)=>`Hello ${n}, I found you on ArtisanHub. I need ${k} work done. Are you available?`,(n,k)=>`Hi ${n}, what is your price for ${k} work?`,(n,k)=>`Hello ${n}, when can you come and look at the job?`];
+async function phoneOf(id){const r=await sb.rpc('get_contact',{p_id:id});
+  if(r.error){toast(/too many/i.test(r.error.message)?'Too many requests. Please try again later.':'Could not get contact. Try again.',1);return null}return r.data}
+async function openMsg(p){
+  const phone=await phoneOf(p.id);if(!phone)return;
+  const n=p.full_name.split(' ')[0],k=(p.skills[0]||'skilled').toLowerCase();cur={phone};
+  $('mgTpl').innerHTML=TPL.map((f,i)=>`<label class="opt"><input type="radio" name="tp" value="${i}" ${i?'':'checked'}> <span>${esc(f(n,k))}</span></label>`).join('');
+  $('mgTxt').value=TPL[0](n,k);$('mgTo').textContent='Message '+p.full_name;$('mg').classList.remove('hide');
+  document.querySelectorAll('[name=tp]').forEach(r=>r.onchange=()=>$('mgTxt').value=TPL[+r.value](n,k))}
+$('mgGo').onclick=()=>{const t=$('mgTxt').value.trim();if(!t)return toast('Write a message first.',1);
+  location.href='https://wa.me/'+wa(cur.phone)+'?text='+encodeURIComponent(t)};
+$('mgX').onclick=()=>$('mg').classList.add('hide');
+
 async function search(){
   const box=$('results');box.innerHTML='<p class="mute">Searching…</p>';
-  let ids=null;const cat=$('fCat').value;
-  if(cat){const r=await sb.from('profile_skills').select('profile_id').eq('category_id',cat);
-    if(r.error)return box.innerHTML='<p class="mute">Search failed. Try again.</p>';ids=r.data.map(x=>x.profile_id)}
-  if(ids&&!ids.length)return box.innerHTML='<div class="card">Nobody is listed for this work yet. Try another area or type.</div>';
-  let q=sb.from('profiles').select('id,full_name,username,age,phone,state,area,bio,avatar_url,verification_status,profile_skills(other_text,categories(name))').limit(50);
-  if(ids)q=q.in('id',ids);
-  const ar=$('fArea').value.trim().replace(/[%,()]/g,'');if(ar)q=q.or(`area.ilike.%${ar}%,state.ilike.%${ar}%`);
-  const r=await q;if(r.error)return box.innerHTML='<p class="mute">Search failed. Try again.</p>';
-  if(!r.data.length)return box.innerHTML='<div class="card">No results. Try a different area or type of work.</div>';
-  box.innerHTML=r.data.map(p=>{const sk=(p.profile_skills||[]).map(s=>`<span class="chip">${esc(s.other_text||(s.categories||{}).name)}</span>`).join('');
-    const ver=p.verification_status==='verified';
+  const r=await sb.rpc('search_artisans',{p_cat:$('fCat').value?+$('fCat').value:null,p_area:$('fArea').value.trim()||null});
+  if(r.error)return box.innerHTML='<p class="mute">Search failed. Try again.</p>';
+  P=r.data;
+  if(!P.length)return box.innerHTML='<div class="card">Nobody found. Try another area or type of work.</div>';
+  box.innerHTML=P.map((p,i)=>{const sk=(p.skills||[]).map(x=>`<span class="chip">${esc(x)}</span>`).join('');const ver=p.verification_status==='verified';
     return `<div class="card"><div class="who">${p.avatar_url?`<img class="av" src="${esc(p.avatar_url)}" alt="">`:`<div class="av">${esc(p.full_name[0])}</div>`}
     <div><h3>${esc(p.full_name)}</h3><div class="mute">${esc(p.age)} yrs · ${esc(p.area)}${p.state?', '+esc(p.state):''}</div>
     <span class="tag ${ver?'v':'p'}">${ver?'✓ Verified':'Verification pending'}</span></div></div>
     <div>${sk}</div>${p.bio?`<p style="margin:10px 0 0">${esc(p.bio)}</p>`:''}
-    <div class="row" style="margin-top:12px"><a class="btn sm" href="tel:${esc(p.phone.replace(/\s/g,''))}">Call</a>
-    <a class="btn sm sun" target="_blank" rel="noopener" href="https://wa.me/${wa(p.phone)}">WhatsApp</a></div></div>`}).join('')}
+    <div class="row" style="margin-top:12px"><button class="btn sm" data-c="${i}">Call</button><button class="btn sm sun" data-w="${i}">Message</button></div></div>`}).join('');
+  box.querySelectorAll('[data-c]').forEach(b=>b.onclick=async()=>{const n=await phoneOf(P[+b.dataset.c].id);if(n)location.href='tel:'+n.replace(/\s/g,'')});
+  box.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>openMsg(P[+b.dataset.w]))}
 $('fGo').onclick=search;
 
-sb.auth.getSession().then(({data})=>{if(data.session)start(data.session.user)});
+(async()=>{await loadCats();nav(false);search();const {data}=await sb.auth.getSession();if(data.session)start(data.session.user)})();
 </script></body></html>
