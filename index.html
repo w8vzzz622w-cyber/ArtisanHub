@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ArtisanHub</title><meta name="theme-color" content="#14213D">
+<title>ArtisanHub NG – Find trusted artisans near you</title><meta name="description" content="Find trusted painters, electricians, plumbers, tailors and more near you in Nigeria."><meta name="theme-color" content="#14213D"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ArtisanHub NG">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Bricolage+Grotesque:wght@800&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#14213D;--paper:#FAFAF7;--line:#E2E4DC;--mute:#5B6475;--sun:#F5B700;--ok:#1F8A5B;--bad:#B3261E}
@@ -57,10 +57,24 @@ nav button.on,.btn.sun,.btn.gold{background:linear-gradient(135deg,var(--gold),v
 .ph{display:flex;gap:6px;overflow-x:auto;margin-top:10px}.ph img{height:84px;width:84px;object-fit:cover;border-radius:10px;flex:none;cursor:pointer}
 .av2{display:block;font-size:12px;font-weight:600;color:var(--ok);margin-top:2px}.av2.off{color:var(--bad)}
 .chip.new{background:#E7F3EC;color:#1F6B47}
+a.logo{color:#fff;text-decoration:none}
+.hero{background:linear-gradient(135deg,#0B1428,#1B2E54);color:#fff;border-radius:16px;padding:28px 20px;margin-top:6px;border-bottom:3px solid var(--gold)}
+.hero h1{font-size:clamp(28px,6vw,46px);color:#fff}.hero p{color:#cfd5e4;max-width:52ch;margin:12px 0 0}
+.hero .row{margin-top:18px;max-width:460px}.hero .btn{margin-top:0}.hero .btn.ghost{background:transparent;color:#fff;border-color:var(--gold2)}
+#home h2{margin:28px 0 10px;font-size:24px}
+.steps,.why{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}.steps .card,.why .card{margin:0}
+.steps{counter-reset:s}.steps .card::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--gold);color:#0B1428;font-weight:700;margin-bottom:8px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.tile{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px 8px;font:600 15px Figtree,sans-serif;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px}.tile span{font-size:26px}.tile:hover{border-color:var(--gold)}
+.contact{margin-top:28px}.contact .btn{width:auto;margin:10px 8px 0 0}
+.fact{margin-top:8px;font-size:14px;color:#39445A}.fact b{color:#8A6A1E}
+#results{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr))}
+#results>p,#results>.card{grid-column:1/-1}#results>.pc{margin-top:0}
+@media(min-width:900px){.wrap{max-width:1100px}#me,#adm{max-width:640px;margin-left:auto;margin-right:auto}#find>h2,#find>label,#find>select,#find>input,#find>.row{max-width:640px}#auth{max-width:520px}}
 </style></head><body>
 
 <section id="auth" class="wrap hide">
-  <h1 class="logo" style="font-size:34px;margin:28px 0 6px">Artisan<i>Hub</i></h1>
+  <h1 class="logo" style="font-size:34px;margin:28px 0 6px">Artisan<i>Hub</i> NG</h1>
   <p class="mute" style="margin:0 0 18px">Find skilled people near you, or get found for the work you do.</p>
   <div class="tabs"><button id="tLogin" class="on">Log in</button><button id="tSign">Create account</button></div>
   <label for="em">Email</label><input id="em" type="email" autocomplete="email">
@@ -68,15 +82,31 @@ nav button.on,.btn.sun,.btn.gold{background:linear-gradient(135deg,var(--gold),v
   <label id="agreeBox" class="opt hide" style="margin-top:14px"><input type="checkbox" id="agree"> <span>I am 18 or older and agree to the <a href="#" data-doc="terms">Terms</a> and <a href="#" data-doc="privacy">Privacy Policy</a></span></label>
   <button id="authBtn" class="btn">Log in</button>
   <p style="text-align:center;margin:14px 0 0"><a href="#" id="forgot" class="mute">Forgot password?</a></p>
-  <button id="aBack" class="btn ghost" type="button">← Back to search</button>
+  <button id="aBack" class="btn ghost" type="button">← Back</button>
 </section>
 
 <div id="app">
-<header><div class="wrap"><span class="logo">Artisan<i>Hub</i></span>
+<header><div class="wrap"><a href="#" id="lgHome" class="logo">Artisan<i>Hub</i> NG</a>
 <nav><button id="nFind" class="on">Find</button><button id="nJoin">Join / Log in</button><button id="nMe" class="hide">My profile</button><button id="nAdm" class="hide">Admin</button><button id="nOut" class="hide">Log out</button></nav></div></header>
 
 <main class="wrap">
-<section id="find">
+<section id="home">
+  <div class="hero"><h1>Find trusted artisans near you</h1>
+  <p>Painters, electricians, plumbers, tailors, mechanics and more. Search by area, check reviews and work photos, then call or message.</p>
+  <div class="row"><button id="hFind" class="btn gold">Find an artisan</button><button id="hJoin" class="btn ghost">Join as an artisan</button></div></div>
+  <h2>How it works</h2>
+  <div class="steps"><div class="card"><b>Search</b><p class="mute" style="margin:4px 0 0">Pick the type of work and your area, or tap Near me.</p></div>
+  <div class="card"><b>Call or message</b><p class="mute" style="margin:4px 0 0">Check reviews and past work, then reach the artisan directly.</p></div>
+  <div class="card"><b>Get the job done</b><p class="mute" style="margin:4px 0 0">Agree the price first, then leave a review afterwards.</p></div></div>
+  <h2>Popular work</h2><div class="tiles" id="hTiles"></div>
+  <h2>Why ArtisanHub NG</h2>
+  <div class="why"><div class="card"><b>Verified badge</b><p class="mute" style="margin:4px 0 0">Artisans whose ID and work we have reviewed get a gold tick.</p></div>
+  <div class="card"><b>Real reviews</b><p class="mute" style="margin:4px 0 0">Signed-in customers can leave one review per artisan.</p></div>
+  <div class="card"><b>Free for customers</b><p class="mute" style="margin:4px 0 0">Search and contact artisans without signing up.</p></div></div>
+  <div class="card contact"><h3>Contact us</h3><p class="mute" id="hCt" style="margin:6px 0 0"></p><div id="hCb"></div><p class="mute" style="margin:10px 0 0">Nigeria</p></div>
+</section>
+
+<section id="find" class="hide">
   <h2 style="margin:6px 0 4px">Who do you need?</h2>
   <label for="fCat">Type of work</label><select id="fCat"><option value="">Any type of work</option></select>
   <label for="fArea">Area or town</label><input id="fArea" placeholder="e.g. Ikeja, Wuse, Rumuokoro">
@@ -97,6 +127,8 @@ nav button.on,.btn.sun,.btn.gold{background:linear-gradient(135deg,var(--gold),v
   <div><label for="mArea">Area or town</label><input id="mArea" placeholder="e.g. Ikeja"></div></div>
   <label for="mAddr">Home address (private, never shown to others)</label><input id="mAddr" autocomplete="street-address">
   <label for="mBio">About your work</label><textarea id="mBio" rows="3" maxlength="300" placeholder="What you do, how long you have done it"></textarea>
+  <div class="row"><div><label for="mYrs">Years of experience (optional)</label><input id="mYrs" type="number" min="0" max="60" inputmode="numeric"></div><div><label for="mPrice">Starting price in ₦ (optional)</label><input id="mPrice" type="number" min="0" inputmode="numeric" placeholder="e.g. 5000"></div></div>
+  <label for="mWa">WhatsApp number (optional, only if different from your phone number)</label><input id="mWa" type="tel" placeholder="08012345678">
   <label for="mCat">Skills you offer</label>
   <div class="row"><select id="mCat" style="flex:3"></select><button id="mAdd" class="btn sm ghost" type="button">Add</button></div>
   <input id="mOther" class="hide" placeholder="Type your own skill" style="margin-top:8px">
@@ -114,7 +146,7 @@ nav button.on,.btn.sun,.btn.gold{background:linear-gradient(135deg,var(--gold),v
 </section>
 <section id="adm" class="hide"><h2 style="margin:6px 0 4px">Verification requests</h2><div id="admVer"></div><h2 style="margin:18px 0 4px">Reports</h2><div id="admList"></div></section>
 </main>
-<footer class="wrap mute" style="text-align:center;padding-bottom:28px"><a href="#" data-doc="terms">Terms</a> · <a href="#" data-doc="privacy">Privacy</a></footer></div>
+<footer class="wrap mute" style="text-align:center;padding-bottom:28px"><a href="#" data-doc="about">About</a> · <a href="#" data-doc="terms">Terms</a> · <a href="#" data-doc="privacy">Privacy</a></footer></div>
 <div id="vf" class="sheet hide"><div>
   <h3>Get your Verified badge</h3>
   <p class="mute" style="margin:4px 0 0">Record a 20 to 30 second video: say your name and your trade, and hold your valid ID close to the camera. We delete the video after we review it. You also need at least 2 photos of your work on your profile.</p>
@@ -123,7 +155,7 @@ nav button.on,.btn.sun,.btn.gold{background:linear-gradient(135deg,var(--gold),v
   <label for="vVid">Video of you with your ID</label><input id="vVid" type="file" accept="video/*">
   <label for="vR1n">Reference 1: name</label><input id="vR1n"><label for="vR1p">Reference 1: phone</label><input id="vR1p" type="tel">
   <label for="vR2n">Reference 2: name</label><input id="vR2n"><label for="vR2p">Reference 2: phone</label><input id="vR2p" type="tel">
-  <label class="opt" style="margin-top:12px"><input type="checkbox" id="vOk"> <span>I agree that ArtisanHub reviews my ID video, and my two references agree to be contacted.</span></label>
+  <label class="opt" style="margin-top:12px"><input type="checkbox" id="vOk"> <span>I agree that ArtisanHub NG reviews my ID video, and my two references agree to be contacted.</span></label>
   <button id="vGo" class="btn sun">Submit for review</button><button id="vX" class="btn ghost" type="button">Cancel</button>
 </div></div>
 <div id="mg" class="sheet hide"><div>
@@ -175,7 +207,7 @@ $('authBtn').onclick=async()=>{
 $('nOut').onclick=async()=>{await sb.auth.signOut();location.reload()};
 
 /* ---- screens ---- */
-function view(v){['find','me','adm'].forEach(k=>$(k).classList.toggle('hide',v!==k));[['nFind','find'],['nMe','me'],['nAdm','adm']].forEach(([n,k])=>$(n).classList.toggle('on',v===k));scrollTo(0,0)}
+function view(v){['home','find','me','adm'].forEach(k=>$(k).classList.toggle('hide',v!==k));[['nFind','find'],['nMe','me'],['nAdm','adm']].forEach(([n,k])=>$(n).classList.toggle('on',v===k));scrollTo(0,0)}
 $('nFind').onclick=()=>{view('find');search()};$('nMe').onclick=()=>view('me');
 
 function showAuth(on){$('auth').classList.toggle('hide',!on);$('app').classList.toggle('hide',on)}
@@ -199,7 +231,7 @@ async function start(user){
     sb.from('profile_skills').select('category_id,other_text').eq('profile_id',uid)]);
   if(p.data){hasProfile=true;const d=p.data;
     $('mName').value=d.full_name;$('mUser').value=d.username;$('mAge').value=d.age;$('mPhone').value=d.phone;
-    $('mState').value=d.state||'';$('mArea').value=d.area;$('mBio').value=d.bio||'';$('mCalls').checked=d.allow_calls!==false;photoUrl=d.avatar_url;paintAv();
+    $('mState').value=d.state||'';$('mArea').value=d.area;$('mBio').value=d.bio||'';$('mYrs').value=d.years_experience??'';$('mPrice').value=d.price_from??'';$('mWa').value=d.whatsapp_number||'';$('mCalls').checked=d.allow_calls!==false;photoUrl=d.avatar_url;paintAv();
     loadVer(d.verification_status)}
   if(pd.data)$('mAddr').value=pd.data.home_address;
   skills=(sk.data||[]).map(s=>({category_id:s.category_id,other_text:s.other_text}));paintSkills();
@@ -230,7 +262,9 @@ function shrink(file,max=640){return new Promise((ok,no)=>{const im=new Image();
 
 $('mSave').onclick=async()=>{
   const v={full_name:$('mName').value.trim(),username:$('mUser').value.trim().toLowerCase(),age:+$('mAge').value,
-    phone:$('mPhone').value.trim(),state:$('mState').value.trim(),area:$('mArea').value.trim(),bio:$('mBio').value.trim(),allow_calls:$('mCalls').checked,available:$('mAvail').checked};
+    phone:$('mPhone').value.trim(),state:$('mState').value.trim(),area:$('mArea').value.trim(),bio:$('mBio').value.trim(),allow_calls:$('mCalls').checked,available:$('mAvail').checked,years_experience:$('mYrs').value===''?null:+$('mYrs').value,price_from:$('mPrice').value===''?null:+$('mPrice').value,whatsapp_number:$('mWa').value.replace(/[\s-]/g,'')||null};
+  if((v.years_experience!=null&&!(Number.isInteger(v.years_experience)&&v.years_experience>=0&&v.years_experience<=60))||(v.price_from!=null&&!(Number.isInteger(v.price_from)&&v.price_from>=0)))return toast('Check years and price: use whole numbers only.',1);
+  if(v.whatsapp_number&&!/^\+?\d{10,14}$/.test(v.whatsapp_number))return toast('WhatsApp number looks wrong. Use digits only, like 08012345678.',1);
   const addr=$('mAddr').value.trim();
   if(!myLoc){try{myLoc=await getLoc()}catch(e){}}
   if(myLoc){v.latitude=myLoc.lat;v.longitude=myLoc.lng}
@@ -292,11 +326,11 @@ async function loadVerQ(){const l=$('admVer');l.innerHTML='<p class="mute">Loadi
 
 /* ---- search (public) ---- */
 let P=[],cur=null;
-const TPL=[(n,k)=>`Hello ${n}, I found you on ArtisanHub. I need ${k} work done. Are you available?`,(n,k)=>`Hi ${n}, what is your price for ${k} work?`,(n,k)=>`Hello ${n}, when can you come and look at the job?`];
-async function phoneOf(id){const r=await sb.rpc('get_contact',{p_id:id});
+const TPL=[(n,k)=>`Hello ${n}, I found you on ArtisanHub NG. I need ${k} work done. Are you available?`,(n,k)=>`Hi ${n}, what is your price for ${k} work?`,(n,k)=>`Hello ${n}, when can you come and look at the job?`];
+async function phoneOf(id,w){const r=await sb.rpc('get_contact',w?{p_id:id,p_wa:true}:{p_id:id});
   if(r.error){toast(/too many/i.test(r.error.message)?'Too many requests. Please try again later.':'Could not get contact. Try again.',1);return null}return r.data}
 async function openMsg(p){
-  const phone=await phoneOf(p.id);if(!phone)return;
+  const phone=await phoneOf(p.id,true);if(!phone)return;
   const n=p.full_name.split(' ')[0],k=(p.skills[0]||'skilled').toLowerCase();cur={phone};
   $('mgTpl').innerHTML=TPL.map((f,i)=>`<label class="opt"><input type="radio" name="tp" value="${i}" ${i?'':'checked'}> <span>${esc(f(n,k))}</span></label>`).join('');
   $('mgTxt').value=TPL[0](n,k);$('mgTo').textContent='Message '+p.full_name;$('mg').classList.remove('hide');
@@ -315,12 +349,13 @@ async function search(){
   if(!P.length)return box.innerHTML='<div class="card">Nobody found. Try another area or type of work.</div>';
   box.innerHTML=P.map((p,i)=>{const ver=['verified','nin_verified'].includes(p.verification_status),sk=p.skills||[];
     const isNew=p.joined_at&&(Date.now()-new Date(p.joined_at))<6048e5;const chips=(isNew?'<span class="chip new">New</span>':'')+sk.slice(0,3).map(x=>`<span class="chip">${esc(x)}</span>`).join('')+(sk.length>3?`<span class="chip more">+${sk.length-3}</span>`:'');
+    const yrs=p.years_experience!=null?` · ${p.years_experience} yr${p.years_experience==1?'':'s'} experience`:'',price=p.price_from?`From ₦${Number(p.price_from).toLocaleString('en-NG')}`:'Price on request';
     const rate=p.review_count?`★ ${Number(p.avg_rating).toFixed(1)} <small>(${p.review_count} reviews)</small>`:'<small>New · no reviews yet</small>';
     return `<article class="card pc"><div class="who">${p.avatar_url?`<img class="av" src="${esc(p.avatar_url)}" alt="">`:`<div class="av">${esc(p.full_name[0])}</div>`}
     <div class="nm"><h3>${esc(p.full_name)}${ver?'<span class="vb" title="Verified">✓</span>':''}</h3>
     <div class="mute">📍 ${esc(p.area)}${p.state?', '+esc(p.state):''} · ${esc(p.age)} yrs${p.distance_km!=null?' · '+p.distance_km+' km away':''}${ver?'':`<span class="nv">${p.verification_status==='submitted'?'Verification in review':'Not verified yet'}</span>`}</div>
     <a href="#" class="rt" data-v="${i}">${rate}</a><span class="av2 ${p.available===false?'off':''}">${p.available===false?'● Busy now':'● Available'}</span></div></div>
-    <div>${chips}</div>${(p.photos||[]).length?`<div class="ph">${p.photos.map(u=>`<img src="${esc(u)}" data-z="${esc(u)}" alt="Past work">`).join('')}</div>`:''}${p.bio?`<p class="bio">${esc(p.bio)}</p>`:''}
+    <div class="fact"><b>${price}</b>${yrs}</div><div>${chips}</div>${(p.photos||[]).length?`<div class="ph">${p.photos.map(u=>`<img src="${esc(u)}" data-z="${esc(u)}" alt="Past work">`).join('')}</div>`:''}${p.bio?`<p class="bio">${esc(p.bio)}</p>`:''}
     <div class="row acts">${p.allow_calls===false?'':`<button class="btn sm" data-c="${i}">Call</button>`}<button class="btn sm gold" data-w="${i}">Message</button></div>
     <div class="mini"><a href="#" data-v="${i}">Reviews</a> · <a href="#" data-s="${i}">Share</a> · <a href="#" data-r="${i}">Report</a></div></article>`}).join('');
   box.querySelectorAll('[data-c]').forEach(b=>b.onclick=async()=>{const n=await phoneOf(P[+b.dataset.c].id);if(n)location.href='tel:'+n.replace(/\s/g,'')});
@@ -349,27 +384,28 @@ $('rpGo').onclick=async()=>{const r=await sb.rpc('report_profile',{p_id:rpId,p_r
   if(r.error)return toast(/too many/i.test(r.error.message)?'Too many reports. Please try again later.':'Could not send the report. Try again.',1);
   $('rp').classList.add('hide');toast('Thank you. We will review this profile.')};
 const DOCS={
+about:`<h3>About ArtisanHub NG</h3><p>ArtisanHub NG helps people in Nigeria find skilled workers near them, and helps artisans get found for the work they do. Customers search and contact artisans for free.</p><p>We connect people only. We do not employ artisans or handle payments.</p>`,
 terms:`<h3>Terms of use</h3>
-<p>ArtisanHub helps people find skilled workers (artisans) near them. We only connect people. We do not employ artisans, guarantee their work, or handle payments. Agree the job, price and payment directly, and carefully.</p>
+<p>ArtisanHub NG helps people find skilled workers (artisans) near them. We only connect people. We do not employ artisans, guarantee their work, or handle payments. Agree the job, price and payment directly, and carefully.</p>
 <p><b>Everyone:</b> be honest and respectful. No fake profiles, spam, harassment or illegal services. You must be 18 or older to create a profile.</p>
 <p><b>Artisans:</b> give your real name, age and details. We may remove profiles that are fake, abusive or reported repeatedly.</p>
 <p><b>Customers:</b> a Verified badge helps but is not a guarantee. Meet in safe places, never pay in full before work starts, and keep valuables safe.</p>
-<p>ArtisanHub is not responsible for disputes, losses or damage between users. We may update these terms from time to time.</p>`,
+<p>ArtisanHub NG is not responsible for disputes, losses or damage between users. We may update these terms from time to time.</p>`,
 privacy:`<h3>Privacy policy</h3>
 <p><b>What we collect:</b> your email, full name, username, age, phone number, state, area, photo, work description, skills, and home address.</p>
-<p><b>How we use it:</b> to run ArtisanHub, show your profile in search, and let people contact you. Your phone number is shown to someone only when they tap Call or Message on your profile. Your home address is private: it is never shown to other users or in search. We do not sell your data.</p>
+<p><b>How we use it:</b> to run ArtisanHub NG, show your profile in search, and let people contact you. Your phone number is shown to someone only when they tap Call or Message on your profile. Your home address is private: it is never shown to other users or in search. We do not sell your data.</p>
 <p><b>Where it is kept:</b> with trusted cloud database and hosting providers, which may store it on servers outside Nigeria. We limit access to it and protect it with security controls.</p>
 <p><b>Verified badge:</b> if you apply, we review a short video of you with your ID and your two references. We delete the video after the decision.</p>
 <p><b>Your control:</b> you can edit your profile any time, and you can delete your account, profile and photo permanently with Delete my profile.</p>`};
 document.addEventListener('click',e=>{const a=e.target.closest('[data-doc]');if(a){e.preventDefault();$('lgBody').innerHTML=DOCS[a.dataset.doc];$('lg').classList.remove('hide')}});
-$('lgX').onclick=()=>{$('lg').classList.add('hide');$('lgBody').innerHTML=''};document.addEventListener('click',e=>{if(e.target.closest('.vb')){$('lgBody').innerHTML='<h3>Verified</h3><p>Verified by the ArtisanHub team. ID and work were reviewed. NIN verification is coming soon.</p>';$('lg').classList.remove('hide')}});
+$('lgX').onclick=()=>{$('lg').classList.add('hide');$('lgBody').innerHTML=''};document.addEventListener('click',e=>{if(e.target.closest('.vb')){$('lgBody').innerHTML='<h3>Verified</h3><p>Verified by the ArtisanHub NG team. ID and work were reviewed. NIN verification is coming soon.</p>';$('lg').classList.remove('hide')}});
 $('fGo').onclick=search;
 
 function getLoc(){return new Promise((ok,no)=>navigator.geolocation?navigator.geolocation.getCurrentPosition(q=>ok({lat:Math.round(q.coords.latitude*100)/100,lng:Math.round(q.coords.longitude*100)/100}),()=>no(),{timeout:10000}):no())}
 $('mLoc').onclick=async()=>{try{myLoc=await getLoc();$('mLocT').textContent='Got it ✓ Tap Save profile'}catch(e){toast('Could not get your location. Allow location access and try again.',1)}};
 $('fNear').onclick=async()=>{try{nearLoc=await getLoc();focusId=null;toast('Showing the closest artisans first.');search()}catch(e){toast('Could not get your location. Allow location access and try again.',1)}};
 async function shareLink(id,name){const url=location.origin+location.pathname+'?p='+id;
-  try{if(navigator.share){await navigator.share({title:'ArtisanHub',text:(name?name+' on ArtisanHub':'My ArtisanHub profile'),url})}else{await navigator.clipboard.writeText(url);toast('Link copied.')}}catch(e){}}
+  try{if(navigator.share){await navigator.share({title:'ArtisanHub NG',text:(name?name+' on ArtisanHub NG':'My ArtisanHub NG profile'),url})}else{await navigator.clipboard.writeText(url);toast('Link copied.')}}catch(e){}}
 $('mShare').onclick=()=>{if(!hasProfile)return toast('Save your profile first.',1);shareLink(uid,'')};
 document.addEventListener('click',e=>{const z=e.target.closest('[data-z]');if(z){$('lgBody').innerHTML=`<img src="${esc(z.dataset.z)}" alt="" style="width:100%;border-radius:12px">`;$('lg').classList.remove('hide')}});
 async function loadPh(){const r=await sb.from('work_photos').select('id,url,path').eq('profile_id',uid).order('created_at');myPh=r.data||[];paintPh()}
@@ -396,5 +432,13 @@ sb.auth.onAuthStateChange(ev=>{if(ev==='PASSWORD_RECOVERY'){showAuth(false);$('p
 $('npwGo').onclick=async()=>{const p=$('npw').value;if(p.length<6)return toast('Use at least 6 characters.',1);
   const r=await sb.auth.updateUser({password:p});if(r.error)return toast(r.error.message,1);
   $('pw2').classList.add('hide');toast('Password changed. You are logged in.');history.replaceState(null,'',location.pathname)};
-(async()=>{await loadCats();nav(false);search();const {data}=await sb.auth.getSession();if(data.session)start(data.session.user)})();
+const SUPPORT_WA='2348140901738',SUPPORT_EMAIL='Artisansjob777@outlook.com';
+$('lgHome').onclick=e=>{e.preventDefault();view('home')};
+$('hFind').onclick=()=>{view('find');search()};
+$('hJoin').onclick=()=>{if(uid)view('me');else{mode(false);showAuth(true)}};
+$('hCt').textContent=SUPPORT_WA?'Questions, or a problem with an artisan? WhatsApp is the fastest way to reach us.':'Questions, or a problem with an artisan? Send us an email.';
+$('hCb').innerHTML=(SUPPORT_WA?`<a class="btn gold sm" href="https://wa.me/${SUPPORT_WA}">Chat on WhatsApp</a>`:'')+(SUPPORT_EMAIL?`<a class="btn ghost sm" href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>`:'');
+[['🎨','Painter','paint'],['⚡','Electrician','electric'],['🔧','Plumber','plumb'],['🏠','POP / Ceiling','pop|ceiling'],['🪟','Aluminium','alumin'],['🚗','Mechanic','mechanic'],['🧵','Tailor','tailor'],['💇','Hair and beauty','hair|beaut|barber']].forEach(([e,l,k])=>{const b=document.createElement('button');b.className='tile';b.innerHTML=`<span>${e}</span>${l}`;
+  b.onclick=()=>{const m=cats.find(c=>new RegExp(k,'i').test(c.name));$('fCat').value=m?m.id:'';$('fArea').value='';focusId=null;view('find');search()};$('hTiles').appendChild(b)});
+(async()=>{await loadCats();nav(false);view(focusId?'find':'home');search();const {data}=await sb.auth.getSession();if(data.session)start(data.session.user)})();
 </script></body></html>
