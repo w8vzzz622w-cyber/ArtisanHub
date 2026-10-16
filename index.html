@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ArtisanHub NG – Find trusted artisans near you</title><meta name="description" content="Find trusted painters, electricians, plumbers, tailors and more near you in Nigeria."><meta name="theme-color" content="#14213D"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ArtisanHub NG">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Bricolage+Grotesque:wght@800&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#14213D;--paper:#FAFAF7;--line:#E2E4DC;--mute:#5B6475;--sun:#F5B700;--ok:#1F8A5B;--bad:#B3261E}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 Figtree,system-ui,sans-serif;padding-bottom:env(safe-area-inset-bottom)}
+h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;margin:0;line-height:1.15}
+.wrap{max-width:560px;margin:0 auto;padding:16px}
+header{background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:12px;padding-bottom:12px}
+.logo{font:800 22px 'Bricolage Grotesque',sans-serif}.logo i{font-style:normal;color:var(--sun)}
+nav button{background:none;border:0;color:#cfd5e4;font:600 15px Figtree,sans-serif;padding:8px 10px;border-radius:8px;cursor:pointer}
+nav button.on{color:var(--ink);background:var(--sun)}
+label{display:block;font-weight:600;font-size:14px;margin:14px 0 4px}
+input,select,textarea{width:100%;padding:12px;border:1.5px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid var(--sun);outline-offset:1px}
+.btn{display:inline-block;width:100%;margin-top:18px;padding:13px;border:0;border-radius:10px;background:var(--ink);color:#fff;font:600 16px Figtree,sans-serif;cursor:pointer;text-align:center;text-decoration:none}
+.btn.sun{background:var(--sun);color:var(--ink)}.btn.sm{width:auto;margin:0;padding:9px 14px;font-size:14px}
+.btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--ink)}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.card{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:14px;margin-top:12px}
+.who{display:flex;gap:12px;align-items:center}
+.av{width:56px;height:56px;border-radius:50%;background:var(--line);object-fit:cover;display:grid;place-items:center;font:800 22px 'Bricolage Grotesque';flex:none}
+.chip{display:inline-block;background:#FFF3CC;border-radius:99px;padding:3px 10px;font-size:13px;margin:6px 6px 0 0}
+.chip b{cursor:pointer;margin-left:6px}
+.tag{font-size:13px;font-weight:600}.tag.v{color:var(--ok)}.tag.p{color:var(--mute)}
+.mute{color:var(--mute);font-size:14px}.hide{display:none!important}
+.tabs{display:flex;border-bottom:2px solid var(--line);margin-bottom:4px}
+.tabs button{flex:1;background:none;border:0;padding:12px;font:600 16px Figtree,sans-serif;color:var(--mute);border-bottom:3px solid transparent;margin-bottom:-2px;cursor:pointer}
+.tabs button.on{color:var(--ink);border-color:var(--sun)}
+#toast{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));max-width:528px;margin:auto;padding:13px 16px;border-radius:10px;background:var(--ink);color:#fff;z-index:9}
+#toast.err{background:var(--bad)}
+.sheet{position:fixed;inset:0;background:rgba(20,33,61,.6);display:flex;z-index:8}
+.sheet>div{background:#fff;width:100%;max-width:560px;margin:auto auto 0;border-radius:16px 16px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}
+.opt{display:flex;gap:8px;font-weight:400;font-size:14px;padding:8px;border:1.5px solid var(--line);border-radius:10px;margin:6px 0}.opt input{width:auto;margin-top:3px}
+:root{--gold:#C9A24B;--gold2:#E8CF8E}
+body{background:#F5F1E8}
+header{background:linear-gradient(135deg,#0B1428,#1B2E54)}
+.logo i{color:var(--gold2)}
+h2,h3{font-family:'Playfair Display',Georgia,serif}
+nav button.on,.btn.sun,.btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0B1428}
+.pc{border:0;border-top:3px solid var(--gold);box-shadow:0 6px 20px rgba(15,27,51,.09);padding:16px;margin-top:14px}
+.pc h3{font-size:19px;font-weight:700}
+.pc .av{width:64px;height:64px;border:2px solid var(--gold);padding:2px;background:#fff}
+.nm{flex:1;min-width:0}
+.vb{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;background:var(--gold);color:#fff;font:700 11px Figtree,sans-serif;margin-left:6px;vertical-align:2px}
+.rt{display:block;color:#8A6A1E;font-weight:600;font-size:14px;text-decoration:none;margin-top:2px}
+.rt small{color:var(--mute);font-weight:400}.nv{font-size:12px;color:var(--mute);margin-left:6px;font-weight:400}
+.chip{background:#F3EAD2;color:#5C4513}.chip.more{background:#EDEFF5;color:var(--mute)}
+.bio{margin:10px 0 0;color:#39445A;font-size:15px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.acts{margin-top:14px}.acts .btn{padding:11px;font-size:15px}
+.mini{margin-top:10px;font-size:13px;color:var(--mute);text-align:center}.mini a{color:var(--mute)}
+.pwwrap{position:relative}.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--mute);font:600 14px Figtree,sans-serif;padding:8px;cursor:pointer}
+.ph{display:flex;gap:6px;overflow-x:auto;margin-top:10px}.ph img{height:84px;width:84px;object-fit:cover;border-radius:10px;flex:none;cursor:pointer}
+.av2{display:block;font-size:12px;font-weight:600;color:var(--ok);margin-top:2px}.av2.off{color:var(--bad)}
+.chip.new{background:#E7F3EC;color:#1F6B47}
+a.logo{color:#fff;text-decoration:none}
+.hero{background:linear-gradient(135deg,#0B1428,#1B2E54);color:#fff;border-radius:16px;padding:28px 20px;margin-top:6px;border-bottom:3px solid var(--gold)}
+.hero h1{font-size:clamp(28px,6vw,46px);color:#fff}.hero p{color:#cfd5e4;max-width:52ch;margin:12px 0 0}
+.hero .row{margin-top:18px;max-width:460px}.hero .btn{margin-top:0}.hero .btn.ghost{background:transparent;color:#fff;border-color:var(--gold2)}
+#home h2{margin:28px 0 10px;font-size:24px}
+.steps,.why{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}.steps .card,.why .card{margin:0}
+.steps{counter-reset:s}.steps .card::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--gold);color:#0B1428;font-weight:700;margin-bottom:8px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.tile{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px 8px;font:600 15px Figtree,sans-serif;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px}.tile span{font-size:26px}.tile:hover{border-color:var(--gold)}
+.contact{margin-top:28px}.contact .btn{width:auto;margin:10px 8px 0 0}
+.fact{margin-top:8px;font-size:14px;color:#39445A}.fact b{color:#8A6A1E}
+#results{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr))}
+#results>p,#results>.card{grid-column:1/-1}#results>.pc{margin-top:0}
+@media(min-width:900px){.wrap{max-width:1100px}#me,#adm{max-width:640px;margin-left:auto;margin-right:auto}#find>h2,#find>label,#find>select,#find>input,#find>.row{max-width:640px}#auth{max-width:520px}}
+#results{margin-top:20px}
+.nv{font-size:11px;color:#8E96A6;margin-left:8px}
+h2{font-weight:600}
+.hero h1{font-family:'Playfair Display',Georgia,serif;font-weight:700;line-height:1.2}
+.hero p{line-height:1.6}
+.seg{display:flex;gap:6px;margin:10px 0}.seg button{flex:1;padding:10px 6px;border:1.5px solid var(--line);background:#fff;border-radius:10px;font:600 14px Figtree,sans-serif;color:var(--ink);cursor:pointer}.seg button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.jint{border-top:1px solid var(--line);padding:10px 0;margin-top:8px}.jint .row{margin-top:8px}
+@media(max-width:480px){.logo{font-size:19px}nav button{padding:6px 7px;font-size:14px}header .wrap{flex-wrap:wrap}}
+@media(min-width:900px){#jobs{max-width:640px;margin-left:auto;margin-right:auto}}
+</style></head><body>
+
+<section id="auth" class="wrap hide">
+  <h1 class="logo" style="font-size:34px;margin:28px 0 6px">Artisan<i>Hub</i> NG</h1>
+  <p class="mute" style="margin:0 0 18px">Find skilled people near you, or get found for the work you do.</p>
+  <div class="tabs"><button id="tLogin" class="on">Log in</button><button id="tSign">Create account</button></div>
+  <label for="em">Email</label><input id="em" type="email" autocomplete="email">
+  <label for="pw">Password (at least 6 characters)</label><input id="pw" type="password" autocomplete="current-password">
+  <label id="agreeBox" class="opt hide" style="margin-top:14px"><input type="checkbox" id="agree"> <span>I am 18 or older and agree to the <a href="#" data-doc="terms">Terms</a> and <a href="#" data-doc="privacy">Privacy Policy</a></span></label>
+  <button id="authBtn" class="btn">Log in</button>
+  <p style="text-align:center;margin:14px 0 0"><a href="#" id="forgot" class="mute">Forgot password?</a></p>
+  <button id="aBack" class="btn ghost" type="button">← Back</button>
+</section>
+
+<div id="app">
+<header><div class="wrap"><a href="#" id="lgHome" class="logo">Artisan<i>Hub</i> NG</a>
+<nav><button id="nFind" class="on">Find</button><button id="nJobs">Jobs</button><button id="nJoin">Join / Log in</button><button id="nMe" class="hide">My profile</button><button id="nAdm" class="hide">Admin</button><button id="nOut" class="hide">Log out</button></nav></div></header>
+
+<main class="wrap">
+<section id="home">
+  <div class="hero"><h1>Find trusted artisans near you</h1>
+  <p>Painters, electricians, plumbers, tailors, mechanics and more. Search by area, check reviews and work photos, then call or message. Or post a job and let artisans come to you.</p>
+  <div class="row"><button id="hFind" class="btn gold">Find an artisan</button><button id="hJoin" class="btn ghost">Join as an artisan</button></div></div>
+  <div class="card" style="margin-top:14px;display:flex;gap:12px;align-items:center;justify-content:space-between"><div><b>Need a job done?</b><div class="mute">Post it and artisans near you can respond.</div></div><button id="hJob" class="btn gold sm" style="width:auto;margin:0;white-space:nowrap">Post a job</button></div>
+  <h2>How it works</h2>
+  <div class="steps"><div class="card"><b>Search</b><p class="mute" style="margin:4px 0 0">Pick the type of work and your area, or tap Near me. Or post a job and let artisans respond.</p></div>
+  <div class="card"><b>Call or message</b><p class="mute" style="margin:4px 0 0">Check reviews, quotes and past work, then reach the artisan directly.</p></div>
+  <div class="card"><b>Get the job done</b><p class="mute" style="margin:4px 0 0">Agree the price first, then leave a review afterwards.</p></div></div>
+  <h2>Popular work</h2><div class="tiles" id="hTiles"></div>
+  <h2>Why ArtisanHub NG</h2>
+  <div class="why"><div class="card"><b>Verified badge</b><p class="mute" style="margin:4px 0 0">Artisans whose ID and work we have reviewed get a gold tick.</p></div>
+  <div class="card"><b>Real reviews</b><p class="mute" style="margin:4px 0 0">Signed-in customers can leave one review per artisan.</p></div>
+  <div class="card"><b>Free for customers</b><p class="mute" style="margin:4px 0 0">Search and contact artisans without signing up. Posting a job is free too.</p></div></div>
+  <div class="card contact"><h3>Contact us</h3><p class="mute" id="hCt" style="margin:6px 0 0"></p><div id="hCb"></div><p class="mute" style="margin:10px 0 0">Nigeria</p></div>
+</section>
+
+<section id="jobs" class="hide">
+  <h2>Jobs</h2>
+  <div id="jOut" class="card hide"><p style="margin:0 0 10px">Log in or sign up to post a job or see jobs for you.</p><button class="btn gold" id="jLogin">Log in or sign up</button></div>
+  <div id="jIn" class="hide">
+   <div class="seg" id="jSeg"><button data-t="post" class="on">Post a job</button><button data-t="mine">My requests</button><button data-t="for" id="jForTab" class="hide">Jobs for me</button></div>
+   <div id="jp_post"><label for="jCat">Type of work</label><select id="jCat"></select>
+    <label for="jArea">Your area or town</label><input id="jArea" maxlength="80" placeholder="e.g. Ikeja">
+    <label for="jDesc">Describe the job</label><textarea id="jDesc" maxlength="500" placeholder="What needs to be done?"></textarea>
+    <label for="jBud">Budget in ₦ (optional)</label><input id="jBud" type="number" min="0" inputmode="numeric">
+    <p class="mute">Artisans see your request, not your name or phone number. You choose who to contact.</p>
+    <button class="btn gold" id="jGo">Post job</button></div>
+   <div id="jp_mine" class="hide"></div><div id="jp_for" class="hide"></div>
+  </div>
+</section>
+
+<section id="find" class="hide">
+  <h2 style="margin:6px 0 4px">Who do you need?</h2>
+  <label for="fCat">Type of work</label><select id="fCat"><option value="">Any type of work</option></select>
+  <label for="fArea">Area or town</label><input id="fArea" placeholder="e.g. Ikeja, Wuse, Rumuokoro">
+  <div class="row"><button id="fGo" class="btn sun">Search</button><button id="fNear" class="btn ghost">📍 Near me</button></div>
+  <div id="focus"></div><div id="results"></div>
+</section>
+
+<section id="me" class="hide">
+  <h2 style="margin:6px 0 4px">My profile</h2>
+  <p id="meNote" class="mute" style="margin:0">Complete this to appear in search. Your full address stays private.</p>
+  <div class="who" style="margin-top:14px"><div id="mAv" class="av">?</div>
+    <div style="flex:1"><label for="mPhoto" style="margin:0 0 4px">Profile photo (a clear picture of your face)</label><input id="mPhoto" type="file" accept="image/*"></div></div>
+  <label for="mName">Full real name</label><input id="mName" autocomplete="name">
+  <div class="row"><div><label for="mUser">Username</label><input id="mUser" autocapitalize="none" placeholder="e.g. tunde_paints"></div>
+  <div><label for="mAge">Age (18+)</label><input id="mAge" type="number" min="18" max="90" inputmode="numeric"></div></div>
+  <label for="mPhone">Phone number</label><input id="mPhone" type="tel" placeholder="08012345678">
+  <div class="row"><div><label for="mState">State</label><input id="mState" placeholder="e.g. Lagos"></div>
+  <div><label for="mArea">Area or town</label><input id="mArea" placeholder="e.g. Ikeja"></div></div>
+  <label for="mAddr">Home address (private, never shown to others)</label><input id="mAddr" autocomplete="street-address">
+  <label for="mBio">About your work</label><textarea id="mBio" rows="3" maxlength="300" placeholder="What you do, how long you have done it"></textarea>
+  <div class="row"><div><label for="mYrs">Years of experience (optional)</label><input id="mYrs" type="number" min="0" max="60" inputmode="numeric"></div><div><label for="mPrice">Starting price in ₦ (optional)</label><input id="mPrice" type="number" min="0" inputmode="numeric" placeholder="e.g. 5000"></div></div>
+  <label for="mWa">WhatsApp number (optional, only if different from your phone number)</label><input id="mWa" type="tel" placeholder="08012345678">
+  <label for="mCat">Skills you offer</label>
+  <div class="row"><select id="mCat" style="flex:3"></select><button id="mAdd" class="btn sm ghost" type="button">Add</button></div>
+  <input id="mOther" class="hide" placeholder="Type your own skill" style="margin-top:8px">
+  <div id="mSkills"></div>
+  <label class="opt" style="margin-top:14px"><input type="checkbox" id="mAvail" checked> <span>I am available for new work (untick when you are busy)</span></label>
+  <div style="margin-top:12px"><button type="button" id="mLoc" class="btn sm ghost">📍 Save my approximate location</button> <span id="mLocT" class="mute"></span></div>
+  <p class="mute" style="margin:4px 0 0">Only an approximate spot (about 1 km) is saved for "near me" search, never your exact address.</p>
+  <label>Photos of your past work (up to 4)</label>
+  <div id="mPh"></div><input id="mPhIn" type="file" accept="image/*" style="margin-top:8px"><p id="mPhNote" class="mute" style="margin:4px 0 0"></p>
+  <button type="button" id="mShare" class="btn sm ghost" style="margin-top:12px">🔗 Share my profile link</button>
+  <div class="card" style="margin-top:14px"><h3 style="font-size:17px">Verified badge</h3><p id="vStat" class="mute" style="margin:4px 0 0"></p><button type="button" id="vBtn" class="btn sm sun" style="margin-top:10px">Get verified</button></div>
+  <label class="opt" style="margin-top:14px"><input type="checkbox" id="mCalls" checked> <span>Allow phone calls (untick for WhatsApp messages only)</span></label>
+  <button id="mSave" class="btn sun">Save profile</button>
+  <button id="mDel" class="btn ghost" style="color:var(--bad);border-color:var(--bad);margin-bottom:24px">Delete my profile</button>
+</section>
+<section id="adm" class="hide"><h2 style="margin:6px 0 4px">Verification requests</h2><div id="admVer"></div><h2 style="margin:18px 0 4px">Reports</h2><div id="admList"></div></section>
+</main>
+<footer class="wrap mute" style="text-align:center;padding-bottom:28px"><a href="#" data-doc="about">About</a> · <a href="#" data-doc="terms">Terms</a> · <a href="#" data-doc="privacy">Privacy</a></footer></div>
+<div id="vf" class="sheet hide"><div>
+  <h3>Get your Verified badge</h3>
+  <p class="mute" style="margin:4px 0 0">Record a 20 to 30 second video: say your name and your trade, and hold your valid ID close to the camera. We delete the video after we review it. You also need at least 2 photos of your work on your profile.</p>
+  <label for="vTrade">Your trade</label><input id="vTrade">
+  <div class="row"><div><label for="vLga">LGA / area</label><input id="vLga"></div><div><label for="vYrs">Years of experience</label><input id="vYrs" type="number" min="0" max="70" inputmode="numeric"></div></div>
+  <label for="vVid">Video of you with your ID</label><input id="vVid" type="file" accept="video/*">
+  <label for="vR1n">Reference 1: name</label><input id="vR1n"><label for="vR1p">Reference 1: phone</label><input id="vR1p" type="tel">
+  <label for="vR2n">Reference 2: name</label><input id="vR2n"><label for="vR2p">Reference 2: phone</label><input id="vR2p" type="tel">
+  <label class="opt" style="margin-top:12px"><input type="checkbox" id="vOk"> <span>I agree that ArtisanHub NG reviews my ID video, and my two references agree to be contacted.</span></label>
+  <button id="vGo" class="btn sun">Submit for review</button><button id="vX" class="btn ghost" type="button">Cancel</button>
+</div></div>
+<div id="mg" class="sheet hide"><div>
+  <h3 id="mgTo">Message</h3><p class="mute" style="margin:4px 0 0">Pick a ready-made message or write your own, then send it on WhatsApp.</p>
+  <div id="mgTpl" style="margin-top:8px"></div>
+  <label for="mgTxt">Your message (you can edit it)</label><textarea id="mgTxt" rows="4"></textarea>
+  <button id="mgGo" class="btn sun">Open WhatsApp</button><button id="mgX" class="btn ghost" type="button">Cancel</button>
+</div></div>
+<div id="rp" class="sheet hide"><div>
+  <h3 id="rpTo">Report this profile</h3>
+  <label for="rpWhy">What is the problem?</label>
+  <select id="rpWhy"><option>Fake or misleading profile</option><option>Not who they say they are</option><option>Abusive or inappropriate</option><option>Scam or asked for money upfront</option><option>Other</option></select>
+  <label for="rpTxt">Details (optional)</label><textarea id="rpTxt" rows="3" maxlength="500"></textarea>
+  <button id="rpGo" class="btn sun">Send report</button><button id="rpX" class="btn ghost" type="button">Cancel</button>
+</div></div>
+<div id="lg" class="sheet hide"><div><div id="lgBody"></div><button id="lgX" class="btn">Close</button></div></div>
+<div id="rv" class="sheet hide"><div>
+  <h3 id="rvTo">Reviews</h3><div id="rvList"></div><div id="rvForm"></div>
+  <button id="rvX" class="btn ghost" type="button">Close</button>
+</div></div>
+<div id="pw2" class="sheet hide"><div><h3>Set a new password</h3>
+  <label for="npw">New password (at least 6 characters)</label><input id="npw" type="password" autocomplete="new-password">
+  <button id="npwGo" class="btn sun">Save new password</button></div></div>
+<div id="toast" class="hide" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const sb=supabase.createClient('https://ndykkrxdreznzzubqgwd.supabase.co','sb_publishable_2-u9poN8TG2Yi6UWVxhXQg_2937clXk');
+const $=id=>document.getElementById(id);
+let uid=null,cats=[],skills=[],hasProfile=false,photoUrl=null,signup=false;
+let myLoc=null,nearLoc=null,focusId=null,myPh=[];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(m,err){const t=$('toast');t.textContent=m;t.className=err?'err':'';clearTimeout(toast.t);toast.t=setTimeout(()=>t.className='hide',4500)}
+const wa=n=>{n=String(n).replace(/\D/g,'');return n.startsWith('0')?'234'+n.slice(1):n};
+
+/* ---- sign in / sign up ---- */
+function mode(s){signup=s;$('tSign').className=s?'on':'';$('tLogin').className=s?'':'on';$('authBtn').textContent=s?'Create account':'Log in';$('agreeBox').classList.toggle('hide',!s);$('forgot').classList.toggle('hide',s)}
+$('tLogin').onclick=()=>mode(false);$('tSign').onclick=()=>mode(true);
+$('authBtn').onclick=async()=>{
+  const email=$('em').value.trim(),password=$('pw').value;
+  if(!email||password.length<6)return toast('Enter your email and a password of at least 6 characters.',1);
+  if(signup&&!$('agree').checked)return toast('Please agree to the Terms and Privacy Policy.',1);
+  $('authBtn').disabled=true;
+  const r=signup?await sb.auth.signUp({email,password}):await sb.auth.signInWithPassword({email,password});
+  $('authBtn').disabled=false;
+  if(r.error)return toast(r.error.message,1);
+  if(!r.data.session)return toast('Check your email to confirm your account, then log in.');
+  start(r.data.session.user)};
+$('nOut').onclick=async()=>{await sb.auth.signOut();location.reload()};
+
+/* ---- screens ---- */
+function view(v){['home','find','jobs','me','adm'].forEach(k=>$(k).classList.toggle('hide',v!==k));[['nFind','find'],['nJobs','jobs'],['nMe','me'],['nAdm','adm']].forEach(([n,k])=>$(n).classList.toggle('on',v===k));scrollTo(0,0)}
+$('nFind').onclick=()=>{view('find');search()};$('nMe').onclick=()=>view('me');
+
+function showAuth(on){$('auth').classList.toggle('hide',!on);$('app').classList.toggle('hide',on)}
+function nav(inn){$('nJoin').classList.toggle('hide',inn);$('nMe').classList.toggle('hide',!inn);$('nOut').classList.toggle('hide',!inn)}
+$('nJoin').onclick=()=>{mode(false);showAuth(true)};$('aBack').onclick=()=>showAuth(false);
+
+async function loadCats(){
+  const c=await sb.from('categories').select('id,group_name,name').order('id');
+  if(c.error)return toast('Could not load job types. Check your internet.',1);
+  cats=c.data;
+  const groups=[...new Set(cats.map(x=>x.group_name))];
+  const opts=groups.map(g=>`<optgroup label="${esc(g)}">`+cats.filter(x=>x.group_name===g).map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('')+'</optgroup>').join('');
+  $('fCat').innerHTML='<option value="">Any type of work</option>'+opts;$('mCat').innerHTML=opts;
+  $('mCat').onchange=()=>$('mOther').classList.toggle('hide',!isOther($('mCat').value));$('mCat').onchange()}
+
+async function start(user){
+  uid=user.id;showAuth(false);nav(true);
+  const [p,pd,sk]=await Promise.all([
+    sb.from('profiles').select('*').eq('id',uid).maybeSingle(),
+    sb.from('private_details').select('home_address').eq('user_id',uid).maybeSingle(),
+    sb.from('profile_skills').select('category_id,other_text').eq('profile_id',uid)]);
+  if(p.data){hasProfile=true;const d=p.data;
+    $('mName').value=d.full_name;$('mUser').value=d.username;$('mAge').value=d.age;$('mPhone').value=d.phone;
+    $('mState').value=d.state||'';$('mArea').value=d.area;$('mBio').value=d.bio||'';$('mYrs').value=d.years_experience??'';$('mPrice').value=d.price_from??'';$('mWa').value=d.whatsapp_number||'';$('mCalls').checked=d.allow_calls!==false;photoUrl=d.avatar_url;paintAv();
+    loadVer(d.verification_status)}
+  if(pd.data)$('mAddr').value=pd.data.home_address;
+  skills=(sk.data||[]).map(s=>({category_id:s.category_id,other_text:s.other_text}));paintSkills();
+  $('mAvail').checked=!(p.data&&p.data.available===false);myLoc=p.data&&p.data.latitude!=null?{lat:p.data.latitude,lng:p.data.longitude}:null;$('mLocT').textContent=myLoc?'Saved ✓':'';loadPh();
+  sb.rpc('is_admin').then(r=>{if(r.data)$('nAdm').classList.remove('hide')});
+  if(hasProfile){view('find');search()}else{view('me');toast('Welcome! Complete your profile to get started.')}}
+
+$('mDel').onclick=async()=>{
+  if(!confirm('Delete your account and profile permanently? This cannot be undone.'))return;
+  await sb.storage.from('avatars').remove([uid+'/avatar.jpg']);
+  const r=await sb.rpc('delete_my_account');if(r.error)return toast('Could not delete: '+r.error.message,1);
+  await sb.auth.signOut();toast('Your account was deleted.');setTimeout(()=>location.reload(),1500)};
+
+/* ---- profile ---- */
+const isOther=id=>(cats.find(c=>c.id==id)||{}).group_name==='Other';
+const catName=s=>s.other_text||(cats.find(c=>c.id==s.category_id)||{}).name||'';
+function paintAv(){const a=$('mAv');a.innerHTML=photoUrl?`<img class="av" src="${esc(photoUrl)}" alt="">`:esc(($('mName').value||'?')[0].toUpperCase())}
+function paintSkills(){$('mSkills').innerHTML=skills.map((s,i)=>`<span class="chip">${esc(catName(s))}<b data-i="${i}" role="button" aria-label="Remove">×</b></span>`).join('')||'<p class="mute">No skills added yet.</p>';
+  document.querySelectorAll('#mSkills b').forEach(b=>b.onclick=()=>{skills.splice(+b.dataset.i,1);paintSkills()})}
+$('mPhoto').onchange=()=>{const f=$('mPhoto').files[0];if(f)$('mAv').innerHTML=`<img class="av" src="${URL.createObjectURL(f)}" alt="">`};
+$('mAdd').onclick=()=>{const id=+$('mCat').value;if(skills.some(s=>s.category_id===id))return toast('You already added that skill.',1);
+  let o=null;if(isOther(id)){o=$('mOther').value.trim();if(!o)return toast('Type your skill first.',1)}
+  skills.push({category_id:id,other_text:o});$('mOther').value='';paintSkills()};
+
+function shrink(file,max=640){return new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height));
+  const c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+  c.toBlob(b=>b?ok(b):no(),'image/jpeg',.8)};im.onerror=no;im.src=URL.createObjectURL(file)})}
+
+$('mSave').onclick=async()=>{
+  const v={full_name:$('mName').value.trim(),username:$('mUser').value.trim().toLowerCase(),age:+$('mAge').value,
+    phone:$('mPhone').value.trim(),state:$('mState').value.trim(),area:$('mArea').value.trim(),bio:$('mBio').value.trim(),allow_calls:$('mCalls').checked,available:$('mAvail').checked,years_experience:$('mYrs').value===''?null:+$('mYrs').value,price_from:$('mPrice').value===''?null:+$('mPrice').value,whatsapp_number:$('mWa').value.replace(/[\s-]/g,'')||null};
+  if((v.years_experience!=null&&!(Number.isInteger(v.years_experience)&&v.years_experience>=0&&v.years_experience<=60))||(v.price_from!=null&&!(Number.isInteger(v.price_from)&&v.price_from>=0)))return toast('Check years and price: use whole numbers only.',1);
+  if(v.whatsapp_number&&!/^\+?\d{10,14}$/.test(v.whatsapp_number))return toast('WhatsApp number looks wrong. Use digits only, like 08012345678.',1);
+  const addr=$('mAddr').value.trim();
+  if(!myLoc){try{myLoc=await getLoc()}catch(e){}}
+  if(myLoc){v.latitude=myLoc.lat;v.longitude=myLoc.lng}
+  if(v.full_name.split(/\s+/).length<2)return toast('Enter your full real name (first and last).',1);
+  if(!/^[a-z0-9_]{3,20}$/.test(v.username))return toast('Username: 3 to 20 letters, numbers or underscores.',1);
+  if(!(v.age>=18))return toast('You must be 18 or older.',1);
+  if(!/^\+?\d{10,15}$/.test(v.phone.replace(/\s/g,'')))return toast('Enter a valid phone number.',1);
+  if(!v.area||!addr)return toast('Add your area and home address.',1);
+  if(!skills.length)return toast('Add at least one skill.',1);
+  if(!photoUrl&&!$('mPhoto').files[0])return toast('Upload a clear photo of your face.',1);
+  $('mSave').disabled=true;let step='photo';
+  try{
+    const f=$('mPhoto').files[0];
+    if(f){const b=await shrink(f),path=uid+'/avatar.jpg';
+      const u=await sb.storage.from('avatars').upload(path,b,{upsert:true,contentType:'image/jpeg'});
+      if(u.error)throw u.error;photoUrl=sb.storage.from('avatars').getPublicUrl(path).data.publicUrl+'?t='+Date.now()}
+    v.avatar_url=photoUrl;
+    step='profile';const w=hasProfile?await sb.from('profiles').update(v).eq('id',uid):await sb.from('profiles').insert({id:uid,...v});
+    if(w.error)throw w.error;hasProfile=true;paintPh();
+    step='address';const a=await sb.from('private_details').upsert({user_id:uid,home_address:addr});if(a.error)throw a.error;
+    step='skills';const d=await sb.from('profile_skills').delete().eq('profile_id',uid);if(d.error)throw d.error;
+    const s=await sb.from('profile_skills').insert(skills.map(x=>({profile_id:uid,...x})));if(s.error)throw s.error;
+    paintAv();toast(myLoc?'Profile saved.':'Profile saved. Allow location access so people near you can find you.');view('find');search();
+  }catch(e){toast(e.code==='23505'?'That username is taken. Try another.':'Could not save ('+step+'): '+(e.message||'try again'),1)}
+  $('mSave').disabled=false};
+
+/* ---- verification ---- */
+let vSt='pending',VQ=[];
+async function loadVer(st){vSt=st;const r=await sb.from('verification_requests').select('status,reject_reason').eq('profile_id',uid).maybeSingle(),q=r.data;
+  const t={verified:'✓ Verified. Your badge shows on your profile.',nin_verified:'✓ Verified.',submitted:'In review. We will check your request soon.'}[st]||(q&&q.status==='rejected'?'Not approved: '+(q.reject_reason||'Please try again.')+' You can submit again.':'Not verified yet. A badge helps customers trust you.');
+  $('vStat').textContent=t;$('vBtn').classList.toggle('hide',['verified','nin_verified','submitted'].includes(st))}
+$('vBtn').onclick=()=>{if(!hasProfile)return toast('Save your profile first.',1);if(myPh.length<2)return toast('Add at least 2 photos of your work first.',1);
+  if(!$('vTrade').value)$('vTrade').value=skills[0]?catName(skills[0]):'';if(!$('vLga').value)$('vLga').value=$('mArea').value;$('vf').classList.remove('hide')};
+$('vX').onclick=()=>$('vf').classList.add('hide');
+$('vGo').onclick=async()=>{const f=$('vVid').files[0],g=id=>$(id).value.trim();
+  if(!g('vTrade')||!g('vLga')||g('vYrs')==='')return toast('Fill in your trade, area and years of experience.',1);
+  if(!f)return toast('Add your ID video.',1);if(f.size>30*1048576)return toast('The video is too big (30 MB max). Record a shorter one.',1);
+  if(!g('vR1n')||!g('vR1p')||!g('vR2n')||!g('vR2p'))return toast('Add both references.',1);
+  if(!$('vOk').checked)return toast('Please tick the agreement box.',1);
+  $('vGo').disabled=true;toast('Uploading. Keep this page open…');
+  try{const ext=((f.name.split('.').pop()||'mp4').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,5))||'mp4',path=uid+'/'+Date.now()+'.'+ext;
+    const u=await sb.storage.from('verification-videos').upload(path,f,{contentType:f.type||'video/mp4'});if(u.error)throw u.error;
+    const r=await sb.rpc('submit_verification',{p_trade:g('vTrade'),p_lga:g('vLga'),p_years:+g('vYrs'),p_r1n:g('vR1n'),p_r1p:g('vR1p'),p_r2n:g('vR2n'),p_r2p:g('vR2p'),p_video:path});
+    if(r.error){await sb.storage.from('verification-videos').remove([path]);throw r.error}
+    $('vf').classList.add('hide');$('vVid').value='';toast('Submitted. We will review it soon.');loadVer('submitted')}
+  catch(e){toast('Could not submit: '+(e.message||'try again'),1)}
+  $('vGo').disabled=false};
+async function loadVerQ(){const l=$('admVer');l.innerHTML='<p class="mute">Loading…</p>';const r=await sb.rpc('admin_verifications');if(r.error)return l.innerHTML='<p class="mute">Not allowed.</p>';VQ=r.data;
+  l.innerHTML=VQ.length?VQ.map((x,i)=>`<div class="card"><b>${esc(x.full_name)}</b> <span class="mute">· ${esc(x.trade)} · ${esc(x.lga)} · ${esc(x.years)} yrs</span>
+  <p class="mute" style="margin:6px 0 0">Refs: ${esc(x.ref1_name)} <a href="tel:${esc(x.ref1_phone)}">${esc(x.ref1_phone)}</a> · ${esc(x.ref2_name)} <a href="tel:${esc(x.ref2_phone)}">${esc(x.ref2_phone)}</a></p>
+  <div class="ph">${(x.photos||[]).map(u=>`<img src="${esc(u)}" data-z="${esc(u)}" alt="">`).join('')}</div>
+  <div class="row" style="margin-top:10px"><button class="btn sm ghost" data-vp="${i}">▶ Video</button><button class="btn sm sun" data-va="${i}">Approve</button><button class="btn sm" style="background:var(--bad)" data-vr="${i}">Reject</button></div></div>`).join(''):'<p class="mute">No requests waiting.</p>';
+  l.querySelectorAll('[data-vp]').forEach(b=>b.onclick=async()=>{const x=VQ[+b.dataset.vp],s=await sb.storage.from('verification-videos').createSignedUrl(x.video_path,600);if(s.error)return toast('Could not open the video.',1);
+    $('lgBody').innerHTML=`<video src="${esc(s.data.signedUrl)}" controls playsinline style="width:100%;border-radius:12px"></video>`;$('lg').classList.remove('hide')});
+  const decide=async(x,ok,why)=>{const d=await sb.rpc('admin_decide_verification',{p_id:x.profile_id,p_ok:ok,p_reason:why});if(d.error)return toast(d.error.message,1);
+    if(x.video_path)await sb.storage.from('verification-videos').remove([x.video_path]);toast(ok?'Approved.':'Rejected.');loadVerQ()};
+  l.querySelectorAll('[data-va]').forEach(b=>b.onclick=()=>{const x=VQ[+b.dataset.va];if(confirm('Approve '+x.full_name+'?'))decide(x,true,null)});
+  l.querySelectorAll('[data-vr]').forEach(b=>b.onclick=()=>{const x=VQ[+b.dataset.vr],why=prompt('Reason for rejecting (the artisan will see this):','Video unclear, please retake.');if(why)decide(x,false,why)})}
+
+/* ---- search (public) ---- */
+let P=[],cur=null;
+const TPL=[(n,k)=>`Hello ${n}, I found you on ArtisanHub NG. I need ${k} work done. Are you available?`,(n,k)=>`Hi ${n}, what is your price for ${k} work?`,(n,k)=>`Hello ${n}, when can you come and look at the job?`];
+async function phoneOf(id,w){const r=await sb.rpc('get_contact',w?{p_id:id,p_wa:true}:{p_id:id});
+  if(r.error){toast(/too many/i.test(r.error.message)?'Too many requests. Please try again later.':'Could not get contact. Try again.',1);return null}return r.data}
+async function openMsg(p){
+  const phone=await phoneOf(p.id,true);if(!phone)return;
+  const n=p.full_name.split(' ')[0],k=(p.skills[0]||'skilled').toLowerCase();cur={phone};
+  $('mgTpl').innerHTML=TPL.map((f,i)=>`<label class="opt"><input type="radio" name="tp" value="${i}" ${i?'':'checked'}> <span>${esc(f(n,k))}</span></label>`).join('');
+  $('mgTxt').value=TPL[0](n,k);$('mgTo').textContent='Message '+p.full_name;$('mg').classList.remove('hide');
+  document.querySelectorAll('[name=tp]').forEach(r=>r.onchange=()=>$('mgTxt').value=TPL[+r.value](n,k))}
+$('mgGo').onclick=()=>{const t=$('mgTxt').value.trim();if(!t)return toast('Write a message first.',1);
+  location.href='https://wa.me/'+wa(cur.phone)+'?text='+encodeURIComponent(t)};
+$('mgX').onclick=()=>$('mg').classList.add('hide');
+
+async function search(){
+  const box=$('results');box.innerHTML='<p class="mute">Searching…</p>';
+  const r=await sb.rpc('search_artisans',{p_cat:$('fCat').value?+$('fCat').value:null,p_area:$('fArea').value.trim()||null,p_lat:nearLoc?nearLoc.lat:null,p_lng:nearLoc?nearLoc.lng:null,p_id:focusId});
+  if(r.error)return box.innerHTML='<p class="mute">Search failed. Try again.</p>';
+  P=r.data;
+  $('focus').innerHTML=focusId?'<p class="mute">Showing one profile. <a href="#" id="fAll">Show everyone</a></p>':'';
+  if(focusId)$('fAll').onclick=e=>{e.preventDefault();focusId=null;history.replaceState(null,'',location.pathname);search()};
+  if(!P.length)return box.innerHTML='<div class="card">Nobody found. Try another area or type of work.</div>';
+  box.innerHTML=P.map((p,i)=>{const ver=['verified','nin_verified'].includes(p.verification_status),sk=p.skills||[];
+    const isNew=p.joined_at&&(Date.now()-new Date(p.joined_at))<6048e5;const chips=(isNew?'<span class="chip new">New</span>':'')+sk.slice(0,3).map(x=>`<span class="chip">${esc(x)}</span>`).join('')+(sk.length>3?`<span class="chip more">+${sk.length-3}</span>`:'');
+    const yrs=p.years_experience!=null?` · ${p.years_experience} yr${p.years_experience==1?'':'s'} experience`:'',price=p.price_from?`From ₦${Number(p.price_from).toLocaleString('en-NG')}`:'Price on request';
+    const rate=p.review_count?`★ ${Number(p.avg_rating).toFixed(1)} <small>(${p.review_count} reviews)</small>`:'<small>New · no reviews yet</small>';
+    return `<article class="card pc"><div class="who">${p.avatar_url?`<img class="av" src="${esc(p.avatar_url)}" alt="">`:`<div class="av">${esc(p.full_name[0])}</div>`}
+    <div class="nm"><h3>${esc(p.full_name)}${ver?'<span class="vb" title="Verified">✓</span>':''}</h3>
+    <div class="mute">📍 ${esc(p.area)}${p.state?', '+esc(p.state):''} · ${esc(p.age)} yrs${p.distance_km!=null?' · '+p.distance_km+' km away':''}${ver?'':`<span class="nv">${p.verification_status==='submitted'?'Verification in review':'Not verified yet'}</span>`}</div>
+    <a href="#" class="rt" data-v="${i}">${rate}</a><span class="av2 ${p.available===false?'off':''}">${p.available===false?'● Busy now':'● Available'}</span></div></div>
+    <div class="fact"><b>${price}</b>${yrs}</div><div>${chips}</div>${(p.photos||[]).length?`<div class="ph">${p.photos.map(u=>`<img src="${esc(u)}" data-z="${esc(u)}" alt="Past work">`).join('')}</div>`:''}${p.bio?`<p class="bio">${esc(p.bio)}</p>`:''}
+    <div class="row acts">${p.allow_calls===false?'':`<button class="btn sm" data-c="${i}">Call</button>`}<button class="btn sm gold" data-w="${i}">Message</button></div>
+    <div class="mini"><a href="#" data-v="${i}">Reviews</a> · <a href="#" data-s="${i}">Share</a> · <a href="#" data-r="${i}">Report</a></div></article>`}).join('');
+  box.querySelectorAll('[data-c]').forEach(b=>b.onclick=async()=>{const n=await phoneOf(P[+b.dataset.c].id);if(n)location.href='tel:'+n.replace(/\s/g,'')});
+  box.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>openMsg(P[+b.dataset.w]));
+  box.querySelectorAll('[data-r]').forEach(a=>a.onclick=e=>{e.preventDefault();rpId=P[+a.dataset.r].id;$('rpTo').textContent='Report '+P[+a.dataset.r].full_name;$('rpTxt').value='';$('rp').classList.remove('hide')});
+  box.querySelectorAll('[data-v]').forEach(a=>a.onclick=e=>{e.preventDefault();openRv(P[+a.dataset.v])});
+  box.querySelectorAll('[data-s]').forEach(a=>a.onclick=e=>{e.preventDefault();shareLink(P[+a.dataset.s].id,P[+a.dataset.s].full_name)})}
+let rpId=null,rvP=null;
+async function openRv(p){
+  rvP=p;$('rvTo').textContent='Reviews for '+p.full_name;$('rvList').innerHTML='<p class="mute">Loading…</p>';$('rvForm').innerHTML='';$('rv').classList.remove('hide');
+  const r=await sb.from('reviews').select('id,reviewer_id,reviewer_name,rating,comment,created_at').eq('profile_id',p.id).order('created_at',{ascending:false}).limit(30);
+  const rows=r.data||[],mine=rows.some(x=>x.reviewer_id===uid);
+  $('rvList').innerHTML=r.error?'<p class="mute">Could not load reviews.</p>':(rows.length?rows.map(x=>`<div class="card" style="margin-top:8px"><b>${'★'.repeat(x.rating)}${'☆'.repeat(5-x.rating)}</b> <span class="mute">${esc(x.reviewer_name)} · ${new Date(x.created_at).toLocaleDateString()}</span>${x.comment?`<p style="margin:6px 0 0">${esc(x.comment)}</p>`:''}${x.reviewer_id===uid?'<p style="margin:6px 0 0"><a href="#" id="rvDel" class="mute">Delete my review</a></p>':''}</div>`).join(''):'<p class="mute">No reviews yet.</p>');
+  const f=$('rvForm');
+  if(!uid){f.innerHTML='<button class="btn" id="rvLogin">Log in to leave a review</button>';$('rvLogin').onclick=()=>{$('rv').classList.add('hide');mode(false);showAuth(true)}}
+  else if(uid===p.id){f.innerHTML='<p class="mute">You cannot review your own profile.</p>'}
+  else if(!mine){f.innerHTML=`<label for="rvStar">Your rating</label><select id="rvStar"><option value="5">★★★★★ Excellent</option><option value="4">★★★★ Good</option><option value="3">★★★ Okay</option><option value="2">★★ Poor</option><option value="1">★ Very bad</option></select><label for="rvName">Your name (shown with your review)</label><input id="rvName" maxlength="40" value="${esc(($('mName').value||'').split(' ')[0])}"><label for="rvTxt">Comment (optional)</label><textarea id="rvTxt" rows="3" maxlength="300" placeholder="Was the work good? Were they on time?"></textarea><button id="rvGo" class="btn sun">Post review</button>`;$('rvGo').onclick=postRv}
+  const d=$('rvDel');if(d)d.onclick=async e=>{e.preventDefault();if(!confirm('Delete your review?'))return;const x=await sb.from('reviews').delete().eq('profile_id',p.id).eq('reviewer_id',uid);if(x.error)return toast('Could not delete.',1);toast('Review deleted.');openRv(p);search()}}
+async function postRv(){const name=$('rvName').value.trim();if(!name)return toast('Enter your name.',1);
+  const r=await sb.from('reviews').insert({profile_id:rvP.id,reviewer_id:uid,rating:+$('rvStar').value,comment:$('rvTxt').value.trim()||null,reviewer_name:name});
+  if(r.error)return toast(r.error.code==='23505'?'You already reviewed this person.':'Could not post: '+r.error.message,1);
+  toast('Thank you for your review.');openRv(rvP);search()}
+$('rvX').onclick=()=>$('rv').classList.add('hide');
+$('rpX').onclick=()=>$('rp').classList.add('hide');
+$('rpGo').onclick=async()=>{const r=await sb.rpc('report_profile',{p_id:rpId,p_reason:$('rpWhy').value,p_details:$('rpTxt').value.trim()||null});
+  if(r.error)return toast(/too many/i.test(r.error.message)?'Too many reports. Please try again later.':'Could not send the report. Try again.',1);
+  $('rp').classList.add('hide');toast('Thank you. We will review this profile.')};
+const DOCS={
+about:`<h3>About ArtisanHub NG</h3><p>ArtisanHub NG helps people in Nigeria find skilled workers near them, and helps artisans get found for the work they do. Customers search, contact artisans and post jobs for free.</p><p>We connect people only. We do not employ artisans or handle payments.</p>`,
+terms:`<h3>Terms of use</h3>
+<p>ArtisanHub NG helps people find skilled workers (artisans) near them. We only connect people. We do not employ artisans, guarantee their work, or handle payments. Agree the job, price and payment directly, and carefully.</p>
+<p><b>Everyone:</b> be honest and respectful. No fake profiles, spam, harassment or illegal services. You must be 18 or older to create a profile or post a job.</p>
+<p><b>Artisans:</b> give your real name, age and details. We may remove profiles that are fake, abusive or reported repeatedly.</p>
+<p><b>Job requests:</b> you must be logged in to post one. Do not post fake, illegal or abusive requests. Prices from artisans are quotes only, and we are not a party to any agreement between you. We may remove requests that are reported.</p>
+<p><b>Customers:</b> a Verified badge helps but is not a guarantee. Meet in safe places, never pay in full before work starts, and keep valuables safe.</p>
+<p>ArtisanHub NG is not responsible for disputes, losses or damage between users. We may update these terms from time to time.</p>`,
+privacy:`<h3>Privacy policy</h3>
+<p><b>What we collect:</b> your email, full name, username, age, phone number, state, area, photo, work description, skills, and home address. If you post a job, we also keep the request (type of work, area, description, budget) and the responses from artisans.</p>
+<p><b>How we use it:</b> to run ArtisanHub NG, show your profile in search, and let people contact you. Your phone number is shown to someone only when they tap Call or Message on your profile. Your home address is private: it is never shown to other users or in search. We do not sell your data.</p>
+<p><b>Job requests:</b> artisans whose skill and area match can see the type of work, area, description and budget. They do not see your name, email or phone number. Artisans who respond are shown to you with their quote and note. Requests are deleted automatically 30 days after posting.</p>
+<p><b>Where it is kept:</b> with trusted cloud database and hosting providers, which may store it on servers outside Nigeria. We limit access to it and protect it with security controls.</p>
+<p><b>Verified badge:</b> if you apply, we review a short video of you with your ID and your two references. We delete the video after the decision.</p>
+<p><b>Your control:</b> you can edit your profile any time, and you can delete your account, profile and photo permanently with Delete my profile.</p>`};
+document.addEventListener('click',e=>{const a=e.target.closest('[data-doc]');if(a){e.preventDefault();$('lgBody').innerHTML=DOCS[a.dataset.doc];$('lg').classList.remove('hide')}});
+$('lgX').onclick=()=>{$('lg').classList.add('hide');$('lgBody').innerHTML=''};document.addEventListener('click',e=>{if(e.target.closest('.vb')){$('lgBody').innerHTML='<h3>Verified</h3><p>Verified by the ArtisanHub NG team. ID and work were reviewed. NIN verification is coming soon.</p>';$('lg').classList.remove('hide')}});
+$('fGo').onclick=search;
+
+function getLoc(){return new Promise((ok,no)=>navigator.geolocation?navigator.geolocation.getCurrentPosition(q=>ok({lat:Math.round(q.coords.latitude*100)/100,lng:Math.round(q.coords.longitude*100)/100}),()=>no(),{timeout:10000}):no())}
+$('mLoc').onclick=async()=>{try{myLoc=await getLoc();$('mLocT').textContent='Got it ✓ Tap Save profile'}catch(e){toast('Could not get your location. Allow location access and try again.',1)}};
+$('fNear').onclick=async()=>{try{nearLoc=await getLoc();focusId=null;toast('Showing the closest artisans first.');search()}catch(e){toast('Could not get your location. Allow location access and try again.',1)}};
+async function shareLink(id,name){const url=location.origin+location.pathname+'?p='+id;
+  try{if(navigator.share){await navigator.share({title:'ArtisanHub NG',text:(name?name+' on ArtisanHub NG':'My ArtisanHub NG profile'),url})}else{await navigator.clipboard.writeText(url);toast('Link copied.')}}catch(e){}}
+$('mShare').onclick=()=>{if(!hasProfile)return toast('Save your profile first.',1);shareLink(uid,'')};
+document.addEventListener('click',e=>{const z=e.target.closest('[data-z]');if(z){$('lgBody').innerHTML=`<img src="${esc(z.dataset.z)}" alt="" style="width:100%;border-radius:12px">`;$('lg').classList.remove('hide')}});
+async function loadPh(){const r=await sb.from('work_photos').select('id,url,path').eq('profile_id',uid).order('created_at');myPh=r.data||[];paintPh()}
+function paintPh(){$('mPh').innerHTML=myPh.map((x,i)=>`<span style="position:relative;display:inline-block;margin:6px 6px 0 0"><img src="${esc(x.url)}" alt="" style="width:76px;height:76px;object-fit:cover;border-radius:10px"><b data-pd="${i}" role="button" aria-label="Remove" style="position:absolute;top:-6px;right:-6px;background:#B3261E;color:#fff;border-radius:50%;width:22px;height:22px;display:grid;place-items:center;cursor:pointer">×</b></span>`).join('');
+  $('mPhNote').textContent=hasProfile?(myPh.length>=4?'You have added 4 photos (the maximum).':''):'Save your profile first, then you can add work photos.';
+  document.querySelectorAll('#mPh [data-pd]').forEach(b=>b.onclick=async()=>{const x=myPh[+b.dataset.pd];await sb.storage.from('work-photos').remove([x.path]);const d=await sb.from('work_photos').delete().eq('id',x.id);if(d.error)return toast('Could not remove.',1);loadPh()})}
+$('mPhIn').onchange=async()=>{const f=$('mPhIn').files[0];if(!f)return;if(!hasProfile)return toast('Save your profile first.',1);if(myPh.length>=4)return toast('Maximum 4 photos.',1);
+  try{const b=await shrink(f,1000),path=uid+'/'+Date.now()+'.jpg';const u=await sb.storage.from('work-photos').upload(path,b,{contentType:'image/jpeg'});if(u.error)throw u.error;
+    const url=sb.storage.from('work-photos').getPublicUrl(path).data.publicUrl;const i=await sb.from('work_photos').insert({profile_id:uid,url,path});if(i.error)throw i.error;
+    $('mPhIn').value='';toast('Photo added.');loadPh()}catch(e){toast('Could not add photo: '+(e.message||'try again'),1)}};
+async function loadAdm(){loadVerQ();const l=$('admList');l.innerHTML='<p class="mute">Loading…</p>';const r=await sb.rpc('admin_reports');if(r.error)return l.innerHTML='<p class="mute">Not allowed.</p>';
+  l.innerHTML=r.data.length?r.data.map((x,i)=>`<div class="card"><b>${esc(x.full_name||'(removed)')}</b> <span class="mute">· ${esc(x.reason)} · ${new Date(x.created_at).toLocaleDateString()}</span>${x.details?`<p style="margin:6px 0 0">${esc(x.details)}</p>`:''}<div class="row" style="margin-top:10px"><button class="btn sm ghost" data-ad="${x.id}">Dismiss</button><button class="btn sm" style="background:var(--bad)" data-ar="${i}">Remove profile</button></div></div>`).join(''):'<p class="mute">No open reports.</p>';
+  l.querySelectorAll('[data-ad]').forEach(b=>b.onclick=async()=>{await sb.rpc('admin_dismiss_report',{p_id:+b.dataset.ad});loadAdm()});
+  l.querySelectorAll('[data-ar]').forEach(b=>b.onclick=async()=>{const x=r.data[+b.dataset.ar];if(!confirm('Permanently remove '+x.full_name+'?'))return;const d=await sb.rpc('admin_remove_profile',{p_id:x.profile_id});if(d.error)return toast(d.error.message,1);toast('Profile removed.');loadAdm()})}
+$('nAdm').onclick=()=>{view('adm');loadAdm()};
+{const q=new URLSearchParams(location.search).get('p');if(q&&/^[0-9a-f-]{36}$/i.test(q))focusId=q}
+['pw','npw'].forEach(id=>{const i=$(id),w=document.createElement('div');w.className='pwwrap';i.parentNode.insertBefore(w,i);w.appendChild(i);i.style.paddingRight='64px';
+  const b=document.createElement('button');b.type='button';b.className='eye';b.textContent='Show';
+  b.onclick=()=>{const h=i.type==='password';i.type=h?'text':'password';b.textContent=h?'Hide':'Show'};w.appendChild(b)});
+$('forgot').onclick=async e=>{e.preventDefault();const email=$('em').value.trim();if(!email)return toast('Type your email above first, then tap Forgot password.',1);
+  const r=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+  toast(r.error?'Could not send the email. Try again later.':'If that email has an account, a reset link is on its way.',!!r.error)};
+sb.auth.onAuthStateChange(ev=>{if(ev==='PASSWORD_RECOVERY'){showAuth(false);$('pw2').classList.remove('hide')}});
+$('npwGo').onclick=async()=>{const p=$('npw').value;if(p.length<6)return toast('Use at least 6 characters.',1);
+  const r=await sb.auth.updateUser({password:p});if(r.error)return toast(r.error.message,1);
+  $('pw2').classList.add('hide');toast('Password changed. You are logged in.');history.replaceState(null,'',location.pathname)};
+let wantJobs=false;
+const ago=d=>{const n=(Date.now()-new Date(d))/864e5;return n<1?"today":n<2?"yesterday":Math.floor(n)+" days ago"},naira=n=>"₦"+Number(n).toLocaleString("en-NG");
+function jtab(t){["post","mine","for"].forEach(k=>$("jp_"+k).classList.toggle("hide",k!==t));document.querySelectorAll("#jSeg button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));if(t==="mine")loadMine();if(t==="for")loadFor()}
+function openJobs(){view("jobs");$("jOut").classList.toggle("hide",!!uid);$("jIn").classList.toggle("hide",!uid);$("jForTab").classList.toggle("hide",!hasProfile);if(!uid)return;$("jCat").innerHTML="<option value=\"\">Choose type of work</option>"+cats.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");jtab("post")}
+$("nJobs").onclick=openJobs;$("hJob").onclick=openJobs;
+$("jLogin").onclick=()=>{wantJobs=true;mode(false);showAuth(true)};
+{const _s=start;start=async function(u){await _s(u);if(wantJobs){wantJobs=false;openJobs()}}}
+document.querySelectorAll("#jSeg button").forEach(b=>b.onclick=()=>jtab(b.dataset.t));
+$("jGo").onclick=async()=>{const cat=+$("jCat").value,area=$("jArea").value.trim(),d=$("jDesc").value.trim(),b=$("jBud").value;
+ if(!cat)return toast("Choose the type of work.",1);if(area.length<2)return toast("Enter your area or town.",1);if(d.length<10)return toast("Describe the job in a few words.",1);
+ if(b!==""&&!(Number.isInteger(+b)&&+b>=0))return toast("Budget must be a whole number.",1);
+ $("jGo").disabled=true;const r=await sb.rpc("post_job",{p_cat:cat,p_area:area,p_desc:d,p_budget:b===""?null:+b});$("jGo").disabled=false;
+ if(r.error)return toast(r.error.message,1);toast("Posted. Artisans in your area can now see it.");$("jDesc").value="";$("jBud").value="";jtab("mine")};
+async function loadMine(){const box=$("jp_mine");box.innerHTML="<p class=\"mute\">Loading...</p>";const r=await sb.rpc("my_jobs");
+ if(r.error){box.innerHTML="<p class=\"mute\">Could not load. Try again.</p>";return}const L=r.data||[];
+ if(!L.length){box.innerHTML="<p class=\"mute\">You have no requests yet.</p>";return}
+ box.innerHTML=L.map((j,x)=>{const open=j.status==="open"&&new Date(j.expires_at)>new Date();return `<div class="card"><b>${esc(j.category)}</b> · ${esc(j.area)}<div class="mute">${ago(j.created_at)}${j.budget!=null?" · Budget "+naira(j.budget):""} · ${open?"Open":"Closed"}</div><p>${esc(j.description)}</p>`+
+ (j.interests.length?j.interests.map((i,y)=>`<div class="jint"><b>${esc(i.full_name)}</b>${i.verified?" <span style=\"color:#C9A24B\">✓</span>":""} <span class="mute">${i.reviews?"★ "+i.rating+" ("+i.reviews+")":"no reviews yet"}</span><div>${i.quote!=null?"Quote: <b>"+naira(i.quote)+"</b>":"No quote given"}${i.note?" · "+esc(i.note):""}</div><div class="row"><button class="btn sm" data-pr="${x}-${y}">Profile</button><button class="btn sm" data-ca="${x}-${y}">Call</button><button class="btn gold sm" data-ms="${x}-${y}">Message</button></div></div>`).join(""):"<p class=\"mute\">No one has shown interest yet.</p>")+
+ (open?`<button class="btn ghost sm" data-cl="${x}">Close request</button>`:"")+"</div>"}).join("");
+ const I=a=>{const[x,y]=a.split("-");return[L[x],L[x].interests[y]]};
+ box.querySelectorAll("[data-pr]").forEach(b=>b.onclick=()=>{focusId=I(b.dataset.pr)[1].artisan_id;view("find");search()});
+ box.querySelectorAll("[data-ca]").forEach(b=>b.onclick=async()=>{const n=await phoneOf(I(b.dataset.ca)[1].artisan_id);if(n)location.href="tel:"+n.replace(/\s/g,"")});
+ box.querySelectorAll("[data-ms]").forEach(b=>b.onclick=()=>{const[j,i]=I(b.dataset.ms);openMsg({id:i.artisan_id,full_name:i.full_name,skills:[j.category]})});
+ box.querySelectorAll("[data-cl]").forEach(b=>b.onclick=async()=>{if(!confirm("Close this request?"))return;const c=await sb.rpc("close_job",{p_job:L[+b.dataset.cl].id});if(c.error)return toast(c.error.message,1);loadMine()})}
+async function loadFor(){const box=$("jp_for");box.innerHTML="<p class=\"mute\">Loading...</p>";const r=await sb.rpc("open_jobs_for_me");
+ if(r.error){box.innerHTML="<p class=\"mute\">Could not load. Try again.</p>";return}const L=r.data||[];
+ if(!L.length){box.innerHTML="<p class=\"mute\">No open jobs match your skills and area right now. Check back soon.</p>";return}
+ box.innerHTML=L.map((j,x)=>`<div class="card"><b>${esc(j.category)}</b> · ${esc(j.area)}<div class="mute">${ago(j.created_at)}${j.budget!=null?" · Budget "+naira(j.budget):""} · ${j.interested} interested</div><p>${esc(j.description)}</p>
+ <div class="row"><input type="number" min="0" inputmode="numeric" placeholder="Your price ₦ (optional)" data-q="${x}" value="${j.mine&&j.mine.quote!=null?j.mine.quote:""}"><input maxlength="200" placeholder="Short note (optional)" data-n="${x}" value="${j.mine&&j.mine.note?esc(j.mine.note):""}"></div>
+ <button class="btn gold sm" data-in="${x}">${j.mine?"Update my interest":"I am interested"}</button> <a href="#" data-rp="${x}" class="mute">Report</a></div>`).join("");
+ box.querySelectorAll("[data-in]").forEach(b=>b.onclick=async()=>{const x=b.dataset.in,q=box.querySelector(`[data-q="${x}"]`).value,n=box.querySelector(`[data-n="${x}"]`).value;
+  if(q!==""&&!(Number.isInteger(+q)&&+q>=0))return toast("Price must be a whole number.",1);
+  const e=await sb.rpc("express_interest",{p_job:L[+x].id,p_quote:q===""?null:+q,p_note:n});if(e.error)return toast(e.error.message,1);toast("Sent. The customer can now see your interest.");loadFor()});
+ box.querySelectorAll("[data-rp]").forEach(a=>a.onclick=async e=>{e.preventDefault();const why=prompt("Why are you reporting this job?");if(!why)return;const q=await sb.rpc("report_job",{p_job:L[+a.dataset.rp].id,p_reason:why.slice(0,200)});toast(q.error?q.error.message:"Thanks. We will review it.",!!q.error)})}
+const SUPPORT_WA='2348140901738',SUPPORT_EMAIL='artisanhubngsupport@gmail.com';
+$('lgHome').onclick=e=>{e.preventDefault();view('home')};
+$('hFind').onclick=()=>{view('find');search()};
+$('hJoin').onclick=()=>{if(uid)view('me');else{mode(false);showAuth(true)}};
+$('hCt').textContent=SUPPORT_WA?'Questions, or a problem with an artisan? WhatsApp is fastest. We usually reply within 24 hours.':'Questions, or a problem with an artisan? Send us an email and we will usually reply within 24 hours.';
+$('hCb').innerHTML=(SUPPORT_WA?`<a class="btn gold sm" href="https://wa.me/${SUPPORT_WA}">Chat on WhatsApp</a>`:'')+(SUPPORT_EMAIL?`<a class="btn ghost sm" href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>`:'');
+[['🎨','Painter','paint'],['⚡','Electrician','electric'],['🔧','Plumber','plumb'],['🏠','POP / Ceiling','pop|ceiling'],['🪟','Aluminium','alumin'],['🚗','Mechanic','mechanic'],['🧵','Tailor','tailor'],['💇','Hair and beauty','hair|beaut|barber']].forEach(([e,l,k])=>{const b=document.createElement('button');b.className='tile';b.innerHTML=`<span>${e}</span>${l}`;
+  b.onclick=()=>{const m=cats.find(c=>new RegExp(k,'i').test(c.name));$('fCat').value=m?m.id:'';$('fArea').value='';focusId=null;view('find');search()};$('hTiles').appendChild(b)});
+(async()=>{await loadCats();nav(false);view(focusId?'find':'home');search();const {data}=await sb.auth.getSession();if(data.session)start(data.session.user)})();
+</script></body></html>
