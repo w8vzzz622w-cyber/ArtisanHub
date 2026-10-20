@@ -99,6 +99,8 @@ footer a{color:#5B6478}
 .fdb{white-space:pre-line;margin:10px 0;overflow-wrap:anywhere}.fdi{width:100%;border-radius:12px;max-height:420px;object-fit:cover;display:block}
 .fda{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.fda button,.fdm button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer}.fda .lk{color:#B3261E;border-color:#B3261E}
 .fdm{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.cm{padding:8px 0;border-top:1px solid var(--line);font-size:14px;overflow-wrap:anywhere}.fdc{margin-top:8px}
+.fdg{display:grid;grid-template-columns:1fr 1fr;gap:6px}.fdg img{width:100%;height:150px;object-fit:cover;border-radius:10px;display:block;cursor:zoom-in}.fdi{cursor:zoom-in}
+.fdv{display:block;margin-top:8px;border-radius:12px;overflow:hidden;background:#14213D;color:#E6CF8B;text-decoration:none;font-weight:600}.fdv img{width:100%;display:block;max-height:220px;object-fit:cover;opacity:.8}.fdv span{display:block;padding:10px 12px}
 </style></head><body>
 
 <section id="auth" class="wrap hide">
@@ -629,20 +631,27 @@ let fdOld=null,fdIds=new Set();
 $('nFeed').onclick=()=>view('feed');
 function fdBox(){const b=$('fdBox');
  if(!uid){b.innerHTML='<p style="margin:0 0 8px">Log in to post, like and comment.</p><button id="fdLogin" class="btn gold sm" type="button">Log in or sign up</button>';$('fdLogin').onclick=()=>{mode(false);showAuth(true)};return}
- b.innerHTML='<textarea id="fdTxt" rows="3" maxlength="600" placeholder="What did you do today? Share a job, a tip or a question..."></textarea>'+(hasProfile?'':'<input id="fdNm" maxlength="40" placeholder="Your name" value="'+esc(fdName())+'">')+'<div class="row" style="margin-top:8px;align-items:center"><label class="btn ghost sm" style="margin:0">📷 Photo<input id="fdPh" type="file" accept="image/*" hidden></label><span id="fdPhN" class="mute" style="flex:1"></span><button id="fdGo" class="btn gold sm" type="button">Post</button></div><p class="mute" style="margin:6px 0 0">No phone numbers in posts. People can reach you from your profile.</p>'+(isAdminUser()?'<label style="display:flex;gap:8px;align-items:center;margin-top:8px"><input id="fdAn" type="checkbox" style="width:auto;margin:0"> Also send an alert to all artisans</label>':'');
- $('fdPh').onchange=()=>{$('fdPhN').textContent=$('fdPh').files[0]?'Photo added':''};
+ b.innerHTML='<textarea id="fdTxt" rows="3" maxlength="600" placeholder="What did you do today? Share a job, a tip or a question..."></textarea>'+(hasProfile?'':'<input id="fdNm" maxlength="40" placeholder="Your name" value="'+esc(fdName())+'">')+'<div class="row" style="margin-top:8px;align-items:center"><label class="btn ghost sm" style="margin:0">📷 Photos<input id="fdPh" type="file" accept="image/*" multiple hidden></label><span id="fdPhN" class="mute" style="flex:1"></span><button id="fdGo" class="btn gold sm" type="button">Post</button></div><input id="fdVid" maxlength="300" placeholder="Video link (YouTube or TikTok). Paste it here, not in the text" style="margin-top:8px"><p class="mute" style="margin:6px 0 0">No phone numbers in posts. People can reach you from your profile.</p>'+(isAdminUser()?'<label style="display:flex;gap:8px;align-items:center;margin-top:8px"><input id="fdAn" type="checkbox" style="width:auto;margin:0"> Also send an alert to all artisans</label>':'');
+ $('fdPh').onchange=()=>{const n=$('fdPh').files.length;$('fdPhN').textContent=n?(n>4?'Only the first 4 will be used':n+' photo'+(n==1?'':'s')+' added'):''};
  $('fdGo').onclick=postFeed}
 async function postFeed(){const txt=$('fdTxt').value.trim();if(!txt)return toast('Write something first.',1);
  const nm=hasProfile?'':$('fdNm').value.trim();if(!hasProfile&&!nm)return toast('Enter your name.',1);
  $('fdGo').disabled=true;let url=null;
- try{const f=$('fdPh').files[0];
-  if(f){const b=await shrink(f,1000),path=uid+'/feed-'+Date.now()+'.jpg';const u=await sb.storage.from('work-photos').upload(path,b,{contentType:'image/jpeg'});if(u.error)throw u.error;url=sb.storage.from('work-photos').getPublicUrl(path).data.publicUrl}
-  const r=await sb.rpc('feed_post',{p_body:txt,p_photo:url,p_name:nm});if(r.error)throw r.error;
+ try{const fs=[...$('fdPh').files].slice(0,4),urls=[];
+  for(let i=0;i<fs.length;i++){const b=await shrink(fs[i],900),path=uid+'/feed-'+Date.now()+'-'+i+'.jpg';const u=await sb.storage.from('work-photos').upload(path,b,{contentType:'image/jpeg'});if(u.error)throw u.error;urls.push(sb.storage.from('work-photos').getPublicUrl(path).data.publicUrl)}
+  const vid=$('fdVid').value.trim();if(vid&&!/^https:\/\//i.test(vid))throw new Error('The video link must start with https://');
+  const r=await sb.rpc('feed_post',{p_body:txt,p_photos:urls,p_video:vid||null,p_name:nm});if(r.error)throw r.error;
   saveName(nm);let msg='Posted.';if($('fdAn')&&$('fdAn').checked){const a=await sb.rpc('feed_announce',{p_post:r.data});msg=a.error?'Posted, but the alert failed: '+a.error.message:'Posted. Alert sent to '+a.data+' artisans.'}toast(msg);fdBox();loadFeed(true)}
  catch(e){toast(e.message||'Could not post. Try again.',1);$('fdGo').disabled=false}}
+function ytId(u){const m=String(u).match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([A-Za-z0-9_-]{11})/);return m?m[1]:null}
+function fdMedia(x){let h='';const ph=(x.photos&&x.photos.length)?x.photos:(x.photo_url?[x.photo_url]:[]);
+ if(ph.length===1)h+='<img class="fdi" data-z="'+esc(ph[0])+'" src="'+esc(ph[0])+'" alt="" loading="lazy">';
+ else if(ph.length>1)h+='<div class="fdg">'+ph.map(u=>'<img data-z="'+esc(u)+'" src="'+esc(u)+'" alt="" loading="lazy">').join('')+'</div>';
+ if(x.video_url&&/^https:\/\//i.test(x.video_url)){const id=ytId(x.video_url),tt=/tiktok/i.test(x.video_url);h+='<a class="fdv" href="'+esc(x.video_url)+'" target="_blank" rel="noopener noreferrer">'+(id?'<img src="https://img.youtube.com/vi/'+id+'/hqdefault.jpg" alt="" loading="lazy">':'')+'<span>▶ Watch on '+(tt?'TikTok':'YouTube')+'</span></a>'}
+ return h}
 function fdCard(x){const job=x.kind==='job',mine=x.author_id===uid,ini=esc((x.author_name||'?').trim().charAt(0).toUpperCase());
  const av=x.avatar_url?'<img class="fdav" src="'+esc(x.avatar_url)+'" alt="">':'<span class="fdav">'+ini+'</span>';
- return '<div class="card fd" data-id="'+x.id+'" data-own="'+(mine&&!job?1:0)+'" data-pin="'+(x.pinned?1:0)+'" style="margin-top:12px'+(x.pinned?';border-color:#C9A24B':'')+'"><div class="fdh">'+av+'<div><b>'+esc(x.author_name)+'</b>'+(x.official?' <span class="ofc">✓ Official</span>':(x.verified?' <span class="vb">✓ Verified</span>':''))+(job?' <span class="jt">JOB REQUEST</span>':'')+(x.pinned?' 📌':'')+'<br><small class="mute">'+esc(ntAgo(x.created_at))+'</small></div></div><p class="fdb">'+esc(x.body)+'</p>'+(x.photo_url?'<img class="fdi" src="'+esc(x.photo_url)+'" alt="" loading="lazy">':'')+'<div class="fda"><button data-a="like" class="'+(x.liked?'lk':'')+'">'+(x.liked?'♥ ':'♡ ')+'<i>'+x.likes+'</i></button><button data-a="cm">💬 <i>'+x.comments+'</i></button><button data-a="share">Share</button>'+(job?'<button data-a="do">I do this work</button>':'')+'<button data-a="more">⋯</button></div><div class="fdc hide"></div></div>'}
+ return '<div class="card fd" data-id="'+x.id+'" data-own="'+(mine&&!job?1:0)+'" data-pin="'+(x.pinned?1:0)+'" style="margin-top:12px'+(x.pinned?';border-color:#C9A24B':'')+'"><div class="fdh">'+av+'<div><b>'+esc(x.author_name)+'</b>'+(x.official?' <span class="ofc">✓ Official</span>':(x.verified?' <span class="vb">✓ Verified</span>':''))+(job?' <span class="jt">JOB REQUEST</span>':'')+(x.pinned?' 📌':'')+'<br><small class="mute">'+esc(ntAgo(x.created_at))+'</small></div></div><p class="fdb">'+esc(x.body)+'</p>'+fdMedia(x)+'<div class="fda"><button data-a="like" class="'+(x.liked?'lk':'')+'">'+(x.liked?'♥ ':'♡ ')+'<i>'+x.likes+'</i></button><button data-a="cm">💬 <i>'+x.comments+'</i></button><button data-a="share">Share</button>'+(job?'<button data-a="do">I do this work</button>':'')+'<button data-a="more">⋯</button></div><div class="fdc hide"></div></div>'}
 async function loadFeed(reset){const L=$('fdList');
  if(reset){fdOld=null;fdIds=new Set();L.innerHTML='<p class="mute">Loading...</p>'}
  const r=await sb.rpc('feed_list',{p_before:fdOld,p_limit:15});
