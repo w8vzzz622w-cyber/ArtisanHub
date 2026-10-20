@@ -95,7 +95,7 @@ footer a{color:#5B6478}
 #nMe,#nAdm,#nOut{display:none!important}
 .mni{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;padding:13px 4px;font:inherit;font-size:16px;color:inherit;cursor:pointer}
 .fdh{display:flex;gap:10px;align-items:center}.fdav{width:40px;height:40px;border-radius:50%;background:#14213D;color:#E6CF8B;display:grid;place-items:center;font-weight:700;object-fit:cover;flex:none}
-.vb{color:#2F6B3F;font-size:12px;font-weight:700;white-space:nowrap}.ofc{display:inline-block;white-space:nowrap;background:linear-gradient(135deg,#F6E7B4,#D9B861);color:#6B4F10;font-size:11px;font-weight:700;padding:1px 8px;border-radius:999px;margin-left:4px;vertical-align:middle}.fdh>div{min-width:0}.jt{background:#14213D;color:#E6CF8B;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:4px}
+.fvb{display:inline-block;background:#E4F2E7;color:#2F6B3F;font-size:11px;font-weight:700;padding:1px 8px;border-radius:999px;margin-left:4px;white-space:nowrap;vertical-align:middle}.ofc{display:inline-block;white-space:nowrap;background:linear-gradient(135deg,#F6E7B4,#D9B861);color:#6B4F10;font-size:11px;font-weight:700;padding:1px 8px;border-radius:999px;margin-left:4px;vertical-align:middle}.fdh>div{min-width:0}.jt{background:#14213D;color:#E6CF8B;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:4px}
 .fdb{white-space:pre-line;margin:10px 0;overflow-wrap:anywhere}.fdi{width:100%;border-radius:12px;max-height:420px;object-fit:cover;display:block}
 .fda{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.fda button,.fdm button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer}.fda .lk{color:#B3261E;border-color:#B3261E}
 .fdm{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.cm{padding:8px 0;border-top:1px solid var(--line);font-size:14px;overflow-wrap:anywhere}.fdc{margin-top:8px}
@@ -107,8 +107,8 @@ footer a{color:#5B6478}
   <h1 class="logo" style="font-size:34px;margin:28px 0 6px">Artisan<i>Hub</i> NG</h1>
   <p class="mute" style="margin:0 0 18px">Find skilled people near you, or get found for the work you do.</p>
   <div class="tabs"><button id="tLogin" class="on">Log in</button><button id="tSign">Create account</button></div>
-  <label for="em">Email</label><input id="em" type="email" autocomplete="email">
-  <label for="pw">Password (at least 6 characters)</label><input id="pw" type="password" autocomplete="current-password">
+  <label for="em">Email</label><input id="em" type="email" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false">
+  <label for="pw">Password (at least 6 characters)</label><input id="pw" type="password" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false">
   <label id="agreeBox" class="opt hide" style="margin-top:14px"><input type="checkbox" id="agree"> <span>I am 18 or older and agree to the <a href="#" data-doc="terms">Terms</a> and <a href="#" data-doc="privacy">Privacy Policy</a></span></label>
   <button id="authBtn" class="btn">Log in</button>
   <p style="text-align:center;margin:14px 0 0"><a href="#" id="forgot" class="mute">Forgot password?</a></p>
@@ -174,14 +174,14 @@ footer a{color:#5B6478}
   <div style="margin-bottom:24px"><div class="card" style="margin-top:14px"><h3 style="font-size:17px">Verified badge</h3><p id="vStat" class="mute" style="margin:4px 0 0"></p><button type="button" id="vBtn" class="btn sm sun" style="margin-top:10px">Get verified</button></div></div>
 </section>
 
-<section id="me" class="hide">
+<section id="me" class="hide"><div id="whoNew" class="card hide" style="margin-bottom:12px"><b>You are logged in as <span id="whoEm"></span></b><p class="mute" style="margin:4px 0 0">Already made a profile with a different email? Open the menu (☰), tap Log out, then log in with that email.</p></div>
   <a href="#" id="meBack" class="mute hide">← Back to my profile</a>
   <h2 id="meH" style="margin:6px 0 4px">My profile</h2>
   <p id="meNote" class="mute" style="margin:0">Complete this to appear in search. Your full address stays private.</p>
   <div class="who" style="margin-top:14px"><div id="mAv" class="av">?</div>
     <div style="flex:1"><label for="mPhoto" style="margin:0 0 4px">Profile photo (a clear picture of your face)</label><input id="mPhoto" type="file" accept="image/*"></div></div>
   <label for="mName">Full real name</label><input id="mName" autocomplete="name">
-  <div class="row"><div><label for="mUser">Username</label><input id="mUser" autocapitalize="none" placeholder="e.g. tunde_paints"></div>
+  <div class="row"><div><label for="mUser">Username</label><input id="mUser" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="e.g. tunde_paints"><div id="uSug" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"></div><small class="mute" style="display:block;margin-top:2px">3 to 20 characters. Lowercase letters, numbers and _ only. No spaces.</small></div>
   <div><label for="mAge">Age (18+)</label><input id="mAge" type="number" min="18" max="90" inputmode="numeric"></div></div>
   <label for="mPhone">Phone number</label><input id="mPhone" type="tel" placeholder="08012345678">
   <div class="row"><div><label for="mState">State</label><input id="mState" placeholder="e.g. Lagos"></div>
@@ -245,7 +245,7 @@ footer a{color:#5B6478}
 <div id="pw2" class="sheet hide"><div><h3>Set a new password</h3>
   <label for="npw">New password (at least 6 characters)</label><input id="npw" type="password" autocomplete="new-password">
   <button id="npwGo" class="btn sun">Save new password</button></div></div>
-<div id="mn" class="sheet hide"><div><h3>Menu</h3>
+<div id="mn" class="sheet hide"><div><h3>Menu</h3><p id="mnWho" class="mute" style="margin:0 0 8px;font-size:13px;overflow-wrap:anywhere"></p>
  <button class="mni" data-m="notif">🔔 Notifications</button>
  <button class="mni" data-m="prof">👤 My profile</button>
  <button class="mni" data-m="ver">✓ Get verified</button>
@@ -279,7 +279,7 @@ const wa=n=>{n=String(n).replace(/\D/g,'');return n.startsWith('0')?'234'+n.slic
 function mode(s){signup=s;$('tSign').className=s?'on':'';$('tLogin').className=s?'':'on';$('authBtn').textContent=s?'Create account':'Log in';$('agreeBox').classList.toggle('hide',!s);$('forgot').classList.toggle('hide',s)}
 $('tLogin').onclick=()=>mode(false);$('tSign').onclick=()=>mode(true);
 $('authBtn').onclick=async()=>{
-  const email=$('em').value.trim(),password=$('pw').value;
+  const email=$('em').value.trim().toLowerCase(),password=$('pw').value;
   if(!email||password.length<6)return toast('Enter your email and a password of at least 6 characters.',1);
   if(signup&&!$('agree').checked)return toast('Please agree to the Terms and Privacy Policy.',1);
   $('authBtn').disabled=true;
@@ -313,6 +313,7 @@ async function start(user){
     sb.from('profiles').select('*').eq('id',uid).maybeSingle(),
     sb.from('private_details').select('home_address').eq('user_id',uid).maybeSingle(),
     sb.from('profile_skills').select('category_id,other_text').eq('profile_id',uid)]);
+  loadFail=!!p.error;if(p.error){toast('Could not load your profile. Check your connection and reopen the app.',1);return}
   if(p.data){hasProfile=true;const d=p.data;
     $('mName').value=d.full_name;$('mUser').value=d.username;$('mAge').value=d.age;$('mPhone').value=d.phone;
     $('mState').value=d.state||'';$('mArea').value=d.area;$('mBio').value=d.bio||'';$('bioCt').textContent=$('mBio').value.length+' / 700';$('mYrs').value=d.years_experience??'';$('mPrice').value=d.price_from??'';$('mWa').value=d.whatsapp_number||'';$('mCalls').checked=d.allow_calls!==false;photoUrl=d.avatar_url;paintAv();
@@ -353,7 +354,7 @@ $('mSave').onclick=async()=>{
   if(!myLoc){try{myLoc=await getLoc()}catch(e){}}
   if(myLoc){v.latitude=myLoc.lat;v.longitude=myLoc.lng}
   if(v.full_name.split(/\s+/).length<2)return toast('Enter your full real name (first and last).',1);
-  if(!/^[a-z0-9_]{3,20}$/.test(v.username))return toast('Username: 3 to 20 letters, numbers or underscores.',1);
+  if(!/^[a-z0-9_]{3,20}$/.test(v.username)){uSuggest();return toast('Username: 3 to 20 characters, lowercase letters, numbers or _ only, no spaces. Tap one of the suggestions below.',1)}
   if(!(v.age>=18))return toast('You must be 18 or older.',1);
   if(!/^\+?\d{10,15}$/.test(v.phone.replace(/\s/g,'')))return toast('Enter a valid phone number.',1);
   if(!v.area||!addr)return toast('Add your area and home address.',1);
@@ -372,7 +373,7 @@ $('mSave').onclick=async()=>{
     step='skills';const d=await sb.from('profile_skills').delete().eq('profile_id',uid);if(d.error)throw d.error;
     const s=await sb.from('profile_skills').insert(skills.map(x=>({profile_id:uid,...x})));if(s.error)throw s.error;
     paintAv();toast(myLoc?'Profile saved.':'Profile saved. Allow location access so people near you can find you.');showProf();search();
-  }catch(e){toast(e.code==='23505'?'That username is taken. Try another.':'Could not save ('+step+'): '+(e.message||'try again'),1)}
+  }catch(e){if(e.code==='23505')uSuggest();toast(e.code==='23505'?'That username is taken. Tap one of the suggestions below.':'Could not save ('+step+'): '+(e.message||'try again'),1)}
   $('mSave').disabled=false};
 
 /* ---- verification ---- */
@@ -516,16 +517,16 @@ $('nAdm').onclick=()=>{view('adm');loadAdm()};
 ['pw','npw'].forEach(id=>{const i=$(id),w=document.createElement('div');w.className='pwwrap';i.parentNode.insertBefore(w,i);w.appendChild(i);i.style.paddingRight='64px';
   const b=document.createElement('button');b.type='button';b.className='eye';b.textContent='Show';
   b.onclick=()=>{const h=i.type==='password';i.type=h?'text':'password';b.textContent=h?'Hide':'Show'};w.appendChild(b)});
-$('forgot').onclick=async e=>{e.preventDefault();const email=$('em').value.trim();if(!email)return toast('Type your email above first, then tap Forgot password.',1);
+$('forgot').onclick=async e=>{e.preventDefault();const email=$('em').value.trim().toLowerCase();if(!email)return toast('Type your email above first, then tap Forgot password.',1);
   const r=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
   toast(r.error?'Could not send the email. Try again later.':'If that email has an account, a reset link is on its way.',!!r.error)};
 sb.auth.onAuthStateChange(ev=>{if(ev==='PASSWORD_RECOVERY'){showAuth(false);$('pw2').classList.remove('hide')}});
 $('npwGo').onclick=async()=>{const p=$('npw').value;if(p.length<6)return toast('Use at least 6 characters.',1);
   const r=await sb.auth.updateUser({password:p});if(r.error)return toast(r.error.message,1);
   $('pw2').classList.add('hide');toast('Password changed. You are logged in.');history.replaceState(null,'',location.pathname)};
-function showEdit(){const h=hasProfile;$("meH").textContent=h?"Edit profile":"Create your profile";$("meBack").classList.toggle("hide",!h);$("meNote").textContent=h?"Update your details. Your full address stays private.":"Complete this to appear in search. Your full address stays private.";view("me")}
+function showEdit(){if(loadFail){toast('Could not load your profile. Check your connection and reopen the app.',1);return}$('whoNew').classList.toggle('hide',hasProfile);const h=hasProfile;$("meH").textContent=h?"Edit profile":"Create your profile";$("meBack").classList.toggle("hide",!h);$("meNote").textContent=h?"Update your details. Your full address stays private.":"Complete this to appear in search. Your full address stays private.";view("me")}
 $("meBack").onclick=e=>{e.preventDefault();showProf()};$("pEdit").onclick=showEdit;
-async function showProf(){if(!hasProfile)return showEdit();view("prof");$("pAvail").checked=$("mAvail").checked;$("pCard").innerHTML="<p class=\"mute\">Loading...</p>";$("pTips").innerHTML="";
+async function showProf(){if(loadFail)return toast('Could not load your profile. Check your connection and reopen the app.',1);if(!hasProfile)return showEdit();view("prof");$("pAvail").checked=$("mAvail").checked;$("pCard").innerHTML="<p class=\"mute\">Loading...</p>";$("pTips").innerHTML="";
  const r=await sb.rpc("search_artisans",{p_id:uid}),p=(r.data||[])[0];if(r.error||!p){$("pCard").innerHTML="<div class=\"card\">Could not load your profile. Check your connection and try again.</div>";return}
  loadVer(p.verification_status);const ver=["verified","nin_verified"].includes(p.verification_status),sk=p.skills||[],ph=p.photos||[],busy=p.available===false;
  const isNew=p.joined_at&&(Date.now()-new Date(p.joined_at))<6048e5,yrs=p.years_experience!=null?` · ${p.years_experience} yr${p.years_experience==1?"":"s"} experience`:"",price=p.price_from?`From ₦${Number(p.price_from).toLocaleString("en-NG")}`:"Price on request";
@@ -620,7 +621,7 @@ async function loadNt(open){const r=await sb.from('notifications').select('id,ti
 $('ntClear').onclick=async()=>{await sb.rpc('clear_notifications');loadNt(true)};
 $('nBell').onclick=async()=>{pushBox='ntPush';$('nt').classList.remove('hide');paintPush();await loadNt(true);await sb.rpc('mark_notifications_read');setTimeout(()=>loadNt(false),400)};
 $('ntX').onclick=()=>$('nt').classList.add('hide');
-{const _s2=start;start=async function(u){await _s2(u);if(!$('feed').classList.contains('hide'))fdBox();$('nBell').classList.remove('hide');loadNt(false);resaveSub().catch(()=>{});clearInterval(ntT);ntT=setInterval(()=>{if(!document.hidden)loadNt(false)},60000)}}
+{const _s2=start;start=async function(u){await _s2(u);$('mnWho').textContent='Signed in as '+u.email;$('whoEm').textContent=u.email;if(!$('feed').classList.contains('hide'))fdBox();$('nBell').classList.remove('hide');loadNt(false);resaveSub().catch(()=>{});clearInterval(ntT);ntT=setInterval(()=>{if(!document.hidden)loadNt(false)},60000)}}
 /* ---- feed, menu, settings ---- */
 const rankP=a=>a.map((p,i)=>[p,i]).sort((x,y)=>{const sc=p=>(['verified','nin_verified'].includes(p.verification_status)?100:0)+(p.review_count?Number(p.avg_rating)*Math.min(p.review_count,5)*2:0)+(p.available===false?-50:0);return sc(y[0])-sc(x[0])||x[1]-y[1]}).map(x=>x[0]);
 const isAdminUser=()=>!$('nAdm').classList.contains('hide');
@@ -651,7 +652,7 @@ function fdMedia(x){let h='';const ph=(x.photos&&x.photos.length)?x.photos:(x.ph
  return h}
 function fdCard(x){const job=x.kind==='job',mine=x.author_id===uid,ini=esc((x.author_name||'?').trim().charAt(0).toUpperCase());
  const av=x.avatar_url?'<img class="fdav" src="'+esc(x.avatar_url)+'" alt="">':'<span class="fdav">'+ini+'</span>';
- return '<div class="card fd" data-id="'+x.id+'" data-own="'+(mine&&!job?1:0)+'" data-pin="'+(x.pinned?1:0)+'" style="margin-top:12px'+(x.pinned?';border-color:#C9A24B':'')+'"><div class="fdh">'+av+'<div><b>'+esc(x.author_name)+'</b>'+(x.official?' <span class="ofc">✓ Official</span>':(x.verified?' <span class="vb">✓ Verified</span>':''))+(job?' <span class="jt">JOB REQUEST</span>':'')+(x.pinned?' 📌':'')+'<br><small class="mute">'+esc(ntAgo(x.created_at))+'</small></div></div><p class="fdb">'+esc(x.body)+'</p>'+fdMedia(x)+'<div class="fda"><button data-a="like" class="'+(x.liked?'lk':'')+'">'+(x.liked?'♥ ':'♡ ')+'<i>'+x.likes+'</i></button><button data-a="cm">💬 <i>'+x.comments+'</i></button><button data-a="share">Share</button>'+(job?'<button data-a="do">I do this work</button>':'')+'<button data-a="more">⋯</button></div><div class="fdc hide"></div></div>'}
+ return '<div class="card fd" data-id="'+x.id+'" data-own="'+(mine&&!job?1:0)+'" data-pin="'+(x.pinned?1:0)+'" style="margin-top:12px'+(x.pinned?';border-color:#C9A24B':'')+'"><div class="fdh">'+av+'<div><b>'+esc(x.author_name)+'</b>'+(x.official?' <span class="ofc">✓ Official</span>':(x.verified?' <span class="fvb">✓ Verified</span>':''))+(job?' <span class="jt">JOB REQUEST</span>':'')+(x.pinned?' 📌':'')+'<br><small class="mute">'+esc(ntAgo(x.created_at))+'</small></div></div><p class="fdb">'+esc(x.body)+'</p>'+fdMedia(x)+'<div class="fda"><button data-a="like" class="'+(x.liked?'lk':'')+'">'+(x.liked?'♥ ':'♡ ')+'<i>'+x.likes+'</i></button><button data-a="cm">💬 <i>'+x.comments+'</i></button><button data-a="share">Share</button>'+(job?'<button data-a="do">I do this work</button>':'')+'<button data-a="more">⋯</button></div><div class="fdc hide"></div></div>'}
 async function loadFeed(reset){const L=$('fdList');
  if(reset){fdOld=null;fdIds=new Set();L.innerHTML='<p class="mute">Loading...</p>'}
  const r=await sb.rpc('feed_list',{p_before:fdOld,p_limit:15});
@@ -666,7 +667,7 @@ $('fdMore').onclick=()=>loadFeed(false);
 async function loadComments(card,id){const box=card.querySelector('.fdc');box.innerHTML='<p class="mute">Loading...</p>';
  const r=await sb.rpc('feed_comments',{p_post:id});if(r.error){box.innerHTML='<p class="mute">Could not load comments.</p>';return}
  card.querySelector('[data-a=cm] i').textContent=r.data.length;
- box.innerHTML=r.data.map(c=>'<div class="cm"><b>'+esc(c.author_name)+'</b>'+(c.official?' <span class="ofc">✓ Official</span>':(c.verified?' <span class="vb">✓</span>':''))+' <small class="mute">'+esc(ntAgo(c.created_at))+'</small>'+((c.author_id===uid||isAdminUser())?' <a href="#" data-cd="'+c.id+'" class="mute">delete</a>':'')+'<br>'+esc(c.body)+'</div>').join('')+(uid?(hasProfile?'':'<input class="cn" maxlength="40" placeholder="Your name" value="'+esc(fdName())+'">')+'<div class="row" style="margin-top:8px"><input class="ct" maxlength="300" placeholder="Write a comment..." style="flex:1"><button class="btn gold sm cs" type="button">Send</button></div>':'<p class="mute" style="margin:8px 0 0">Log in to comment.</p>');
+ box.innerHTML=r.data.map(c=>'<div class="cm"><b>'+esc(c.author_name)+'</b>'+(c.official?' <span class="ofc">✓ Official</span>':(c.verified?' <span class="fvb">✓</span>':''))+' <small class="mute">'+esc(ntAgo(c.created_at))+'</small>'+((c.author_id===uid||isAdminUser())?' <a href="#" data-cd="'+c.id+'" class="mute">delete</a>':'')+'<br>'+esc(c.body)+'</div>').join('')+(uid?(hasProfile?'':'<input class="cn" maxlength="40" placeholder="Your name" value="'+esc(fdName())+'">')+'<div class="row" style="margin-top:8px"><input class="ct" maxlength="300" placeholder="Write a comment..." style="flex:1"><button class="btn gold sm cs" type="button">Send</button></div>':'<p class="mute" style="margin:8px 0 0">Log in to comment.</p>');
  const sbtn=box.querySelector('.cs');
  if(sbtn)sbtn.onclick=async()=>{const t=box.querySelector('.ct').value.trim();if(!t)return;const nm=hasProfile?'':box.querySelector('.cn').value.trim();if(!hasProfile&&!nm)return toast('Enter your name.',1);const w=await sb.rpc('feed_comment',{p_post:id,p_body:t,p_name:nm});if(w.error)return toast(w.error.message,1);saveName(nm);loadComments(card,id)};
  box.querySelectorAll('[data-cd]').forEach(a=>a.onclick=async e=>{e.preventDefault();if(!confirm('Delete this comment?'))return;const w=await sb.rpc('feed_delete_comment',{p_id:+a.dataset.cd});if(w.error)return toast(w.error.message,1);loadComments(card,id)})}
@@ -700,6 +701,18 @@ $('mn').onclick=e=>{if(e.target.closest('[data-doc]')){$('mn').classList.add('hi
 $('stX').onclick=()=>$('st').classList.add('hide');
 $('stDel').onclick=()=>{$('st').classList.add('hide');$('mDel').click()};
 $('stPwB').onclick=async()=>{const pw=$('stPw').value;if(pw.length<6)return toast('Use at least 6 characters.',1);const r=await sb.auth.updateUser({password:pw});if(r.error)return toast(r.error.message,1);$('stPw').value='';toast('Password changed.')};
+/* ---- usernames ---- */
+let loadFail=false;
+const uClean=v=>String(v||'').toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'').slice(0,20);
+function uSuggest(){const w=($('mName').value||'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').trim().split(/\s+/).filter(Boolean),box=$('uSug');
+ if(!w.length){box.innerHTML='';return[]}
+ const f=w[0],l=w[w.length-1],r=()=>Math.floor(10+Math.random()*90),out=[],add=x=>{x=uClean(x);if(x.length>=3&&!out.includes(x))out.push(x)};
+ add(f+'_'+l);add(f+l+r());add(f+r());add(l+f+r());add(f+'_'+r());
+ const top=out.slice(0,3);
+ box.innerHTML=top.map(x=>'<button type="button" class="btn sm ghost" data-us="'+esc(x)+'">'+esc(x)+'</button>').join('');return top}
+$('uSug').onclick=e=>{const b=e.target.closest('[data-us]');if(b){$('mUser').value=b.dataset.us}};
+$('mUser').addEventListener('input',()=>{const v=uClean($('mUser').value);if(v!==$('mUser').value)$('mUser').value=v});
+$('mName').addEventListener('blur',()=>{if(hasProfile)return;const t=uSuggest();if(!$('mUser').value&&t.length)$('mUser').value=t[0]});
 const SV=(()=>{try{return[sessionStorage.getItem('ah_v'),sessionStorage.getItem('ah_j')]}catch(e){return[null,null]}})();
 async function autoNear(){try{const st=await navigator.permissions.query({name:'geolocation'});if(st.state==='granted'){nearLoc=await getLoc();$('nearHint').classList.add('hide')}}catch(e){}}
 (async()=>{await loadCats();nav(false);const GO=new URLSearchParams(location.search).get('go'),keep=(!focusId&&SV[0]&&SV[0]!=='home')?SV[0]:null;
