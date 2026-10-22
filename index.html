@@ -101,6 +101,8 @@ footer a{color:#5B6478}
 .fdm{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.cm{padding:8px 0;border-top:1px solid var(--line);font-size:14px;overflow-wrap:anywhere}.fdc{margin-top:8px}
 .fdg{display:grid;grid-template-columns:1fr 1fr;gap:6px}.fdg img{width:100%;height:150px;object-fit:cover;border-radius:10px;display:block;cursor:zoom-in}.fdi{cursor:zoom-in}
 .fdv{display:block;margin-top:8px;border-radius:12px;overflow:hidden;background:#14213D;color:#E6CF8B;text-decoration:none;font-weight:600}.fdv img{width:100%;display:block;max-height:220px;object-fit:cover;opacity:.8}.fdv span{display:block;padding:10px 12px}
+.ofav{background:linear-gradient(135deg,#F6E7B4,#D9B861)!important;color:#14213D!important;font-size:15px;letter-spacing:.5px}.cuav{background:#6C7A99!important}
+.fdb.clp{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}.fdb.clp.open{display:block;-webkit-line-clamp:unset;overflow:visible}
 </style></head><body>
 
 <section id="auth" class="wrap hide">
@@ -149,7 +151,7 @@ footer a{color:#5B6478}
    <div class="seg" id="jSeg"><button data-t="post" class="on">Post a job</button><button data-t="mine">My requests</button><button data-t="for" id="jForTab" class="hide">Jobs for me</button></div>
    <div id="jp_post"><label for="jCat">Type of work</label><select id="jCat"></select>
     <label for="jArea">Your area or town</label><input id="jArea" maxlength="80" placeholder="e.g. Ikeja">
-    <label for="jDesc">Describe the job</label><textarea id="jDesc" maxlength="500" placeholder="What needs to be done?"></textarea><p class="mute" style="margin:4px 0 0">Your request, without your name or phone number, is also shown on the public feed so more artisans can see it.</p>
+    <label for="jDesc">Describe the job</label><textarea id="jDesc" maxlength="500" placeholder="What needs to be done?"></textarea><p class="mute" style="margin:4px 0 0">Your request, without your name or phone number, is also shown on the public feed so more artisans can see it. This form is for people who need work done. If you offer a service, create an artisan profile instead. No adverts. This form is for work you need done. If you are an artisan offering your services, create a profile instead.</p>
     <label for="jBud">Budget in ₦ (optional)</label><input id="jBud" type="number" min="0" inputmode="numeric">
     <p class="mute">Artisans see your request, not your name or phone number. You choose who to contact.</p>
     <button class="btn gold" id="jGo">Post job</button></div>
@@ -650,9 +652,10 @@ function fdMedia(x){let h='';const ph=(x.photos&&x.photos.length)?x.photos:(x.ph
  else if(ph.length>1)h+='<div class="fdg">'+ph.map(u=>'<img data-z="'+esc(u)+'" src="'+esc(u)+'" alt="" loading="lazy">').join('')+'</div>';
  if(x.video_url&&/^https:\/\//i.test(x.video_url)){const id=ytId(x.video_url),tt=/tiktok/i.test(x.video_url);h+='<a class="fdv" href="'+esc(x.video_url)+'" target="_blank" rel="noopener noreferrer">'+(id?'<img src="https://img.youtube.com/vi/'+id+'/hqdefault.jpg" alt="" loading="lazy">':'')+'<span>▶ Watch on '+(tt?'TikTok':'YouTube')+'</span></a>'}
  return h}
-function fdCard(x){const job=x.kind==='job',mine=x.author_id===uid,ini=esc((x.author_name||'?').trim().charAt(0).toUpperCase());
- const av=x.avatar_url?'<img class="fdav" src="'+esc(x.avatar_url)+'" alt="">':'<span class="fdav">'+ini+'</span>';
- return '<div class="card fd" data-id="'+x.id+'" data-own="'+(mine&&!job?1:0)+'" data-pin="'+(x.pinned?1:0)+'" style="margin-top:12px'+(x.pinned?';border-color:#C9A24B':'')+'"><div class="fdh">'+av+'<div><b>'+esc(x.author_name)+'</b>'+(x.official?' <span class="ofc">✓ Official</span>':(x.verified?' <span class="fvb">✓ Verified</span>':''))+(job?' <span class="jt">JOB REQUEST</span>':'')+(x.pinned?' 📌':'')+'<br><small class="mute">'+esc(ntAgo(x.created_at))+'</small></div></div><p class="fdb">'+esc(x.body)+'</p>'+fdMedia(x)+'<div class="fda"><button data-a="like" class="'+(x.liked?'lk':'')+'">'+(x.liked?'♥ ':'♡ ')+'<i>'+x.likes+'</i></button><button data-a="cm">💬 <i>'+x.comments+'</i></button><button data-a="share">Share</button>'+(job?'<button data-a="do">I do this work</button>':'')+'<button data-a="more">⋯</button></div><div class="fdc hide"></div></div>'}
+const avCol=n=>{const c=['#14213D','#2F6B3F','#7A3E65','#8A4B2A','#2F5F8A','#5B4B8A'];let h=0;for(const ch of String(n||'?'))h=(h*31+ch.charCodeAt(0))>>>0;return c[h%c.length]};
+function fdCard(x){const long=x.body.length>260||(x.body.match(/\n/g)||[]).length>4;const job=x.kind==='job',mine=x.author_id===uid,ini=esc((x.author_name||'?').trim().charAt(0).toUpperCase());
+ const av=x.official?'<span class="fdav ofav">AH</span>':x.avatar_url?'<img class="fdav" src="'+esc(x.avatar_url)+'" alt="">':job?'<span class="fdav cuav"><svg viewBox="0 0 24 24" width="22" height="22" fill="#fff"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8z"/></svg></span>':'<span class="fdav" style="background:'+avCol(x.author_name)+'">'+ini+'</span>';
+ return '<div class="card fd" data-id="'+x.id+'" data-own="'+(mine&&!job?1:0)+'" data-pin="'+(x.pinned?1:0)+'" style="margin-top:12px'+(x.pinned?';border-color:#C9A24B':'')+'"><div class="fdh">'+av+'<div><b>'+esc(x.author_name)+'</b>'+(x.official?' <span class="ofc">✓ Official</span>':(x.verified?' <span class="fvb">✓ Verified</span>':''))+(job?' <span class="jt">JOB REQUEST</span>':'')+(x.pinned?' 📌':'')+'<br><small class="mute">'+esc(ntAgo(x.created_at))+'</small></div></div><p class="fdb'+(long?' clp':'')+'">'+esc(x.body)+'</p>'+(long?'<a href="#" class="more" data-more>Read more</a>':'')+fdMedia(x)+'<div class="fda"><button data-a="like" class="'+(x.liked?'lk':'')+'">'+(x.liked?'♥ ':'♡ ')+'<i>'+x.likes+'</i></button><button data-a="cm">💬 <i>'+x.comments+'</i></button><button data-a="share">Share</button>'+(job?'<button data-a="do">I do this work</button>':'')+'<button data-a="more">⋯</button></div><div class="fdc hide"></div></div>'}
 async function loadFeed(reset){const L=$('fdList');
  if(reset){fdOld=null;fdIds=new Set();L.innerHTML='<p class="mute">Loading...</p>'}
  const r=await sb.rpc('feed_list',{p_before:fdOld,p_limit:15});
