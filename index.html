@@ -103,6 +103,7 @@ footer a{color:#5B6478}
 .fdv{display:block;margin-top:8px;border-radius:12px;overflow:hidden;background:#14213D;color:#E6CF8B;text-decoration:none;font-weight:600}.fdv img{width:100%;display:block;max-height:220px;object-fit:cover;opacity:.8}.fdv span{display:block;padding:10px 12px}
 .ofav{background:#14213D!important;color:#E6CF8B!important;font-size:21px;box-shadow:0 0 0 2.5px #C9A24B}.cuav{background:#6C7A99!important}
 .fdb.clp{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}.fdb.clp.open{display:block;-webkit-line-clamp:unset;overflow:visible}
+.sg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.sc{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}.sc b{display:block;font-size:26px;color:#14213D}.sc small{color:var(--mute)}
 </style></head><body>
 
 <section id="auth" class="wrap hide">
@@ -212,7 +213,7 @@ footer a{color:#5B6478}
  <div id="fdList"></div>
  <button id="fdMore" class="btn ghost hide" type="button" style="width:100%;margin-top:10px">Load more</button>
 </section>
-<section id="adm" class="hide"><h2 style="margin:6px 0 4px">Verification requests</h2><div id="admVer"></div><h2 style="margin:18px 0 4px">Reports</h2><div id="admList"></div></section>
+<section id="adm" class="hide"><h2 style="margin:6px 0 8px">Overview</h2><div id="admStats"></div><h2 style="margin:18px 0 4px">Verification requests</h2><div id="admVer"></div><h2 style="margin:18px 0 4px">Reports</h2><div id="admList"></div></section>
 </main>
 <footer class="wrap mute" style="text-align:center;padding-bottom:28px"><a href="#" data-doc="about">About</a> · <a href="#" data-doc="terms">Terms</a> · <a href="#" data-doc="privacy">Privacy</a><br><small>© 2026 ArtisanHub NG · A B!g Raps™ Product</small></footer></div>
 <div id="vf" class="sheet hide"><div>
@@ -509,7 +510,7 @@ $('mPhIn').onchange=async()=>{const f=$('mPhIn').files[0];if(!f)return;if(!hasPr
   try{const b=await shrink(f,1000),path=uid+'/'+Date.now()+'.jpg';const u=await sb.storage.from('work-photos').upload(path,b,{contentType:'image/jpeg'});if(u.error)throw u.error;
     const url=sb.storage.from('work-photos').getPublicUrl(path).data.publicUrl;const i=await sb.from('work_photos').insert({profile_id:uid,url,path});if(i.error)throw i.error;
     $('mPhIn').value='';toast('Photo added.');loadPh()}catch(e){toast('Could not add photo: '+(e.message||'try again'),1)}};
-async function loadAdm(){loadVerQ();const l=$('admList');l.innerHTML='<p class="mute">Loading…</p>';const r=await sb.rpc('admin_reports');if(r.error)return l.innerHTML='<p class="mute">Not allowed.</p>';
+async function loadAdm(){loadStats();loadVerQ();const l=$('admList');l.innerHTML='<p class="mute">Loading…</p>';const r=await sb.rpc('admin_reports');if(r.error)return l.innerHTML='<p class="mute">Not allowed.</p>';
   l.innerHTML=r.data.length?r.data.map((x,i)=>`<div class="card"><b>${esc(x.full_name||'(removed)')}</b> <span class="mute">· ${esc(x.reason)} · ${new Date(x.created_at).toLocaleDateString()}</span>${x.details?`<p style="margin:6px 0 0">${esc(x.details)}</p>`:''}<div class="row" style="margin-top:10px"><button class="btn sm ghost" data-ad="${x.id}">Dismiss</button><button class="btn sm" style="background:var(--bad)" data-ar="${i}">Remove profile</button><button class="btn sm" style="background:#6B1010;color:#fff" data-ab="${i}">Ban</button></div></div>`).join(''):'<p class="mute">No open reports.</p>';
   l.querySelectorAll('[data-ad]').forEach(b=>b.onclick=async()=>{await sb.rpc('admin_dismiss_report',{p_id:+b.dataset.ad});loadAdm()});
   l.querySelectorAll('[data-ab]').forEach(b=>b.onclick=async()=>{const x=r.data[+b.dataset.ab];if(!confirm('Ban '+x.full_name+'? This deletes their account and blocks their email from signing up again.'))return;const why=prompt('Reason for the ban (for your own record):','')||'';const d=await sb.rpc('admin_ban_user',{p_id:x.profile_id,p_reason:why.slice(0,200)});if(d.error)return toast(d.error.message,1);toast('Banned and email blocked.');loadAdm()});
@@ -716,6 +717,8 @@ function uSuggest(){const w=($('mName').value||'').toLowerCase().replace(/[^a-z0
 $('uSug').onclick=e=>{const b=e.target.closest('[data-us]');if(b){$('mUser').value=b.dataset.us}};
 $('mUser').addEventListener('input',()=>{const v=uClean($('mUser').value);if(v!==$('mUser').value)$('mUser').value=v});
 $('mName').addEventListener('blur',()=>{if(hasProfile)return;const t=uSuggest();if(!$('mUser').value&&t.length)$('mUser').value=t[0]});
+async function loadStats(){const b=$('admStats');b.innerHTML='<p class="mute">Loading...</p>';const r=await sb.rpc('admin_stats');if(r.error){b.innerHTML='';return}const d=r.data;
+ b.innerHTML='<div class="sg">'+[['Artisans',d.artisans],['Verified',d.verified],['New this week',d.new_7d],['All accounts',d.accounts],['Waiting for verification',d.pending_verifications],['Open jobs',d.open_jobs],['Feed posts',d.posts],['Phones with alerts on',d.phones_alerts]].map(x=>'<div class="sc"><b>'+x[1]+'</b><small>'+x[0]+'</small></div>').join('')+'</div>'}
 const SV=(()=>{try{return[sessionStorage.getItem('ah_v'),sessionStorage.getItem('ah_j')]}catch(e){return[null,null]}})();
 async function autoNear(){try{const st=await navigator.permissions.query({name:'geolocation'});if(st.state==='granted'){nearLoc=await getLoc();$('nearHint').classList.add('hide')}}catch(e){}}
 (async()=>{await loadCats();nav(false);const GO=new URLSearchParams(location.search).get('go'),keep=(!focusId&&SV[0]&&SV[0]!=='home')?SV[0]:null;
