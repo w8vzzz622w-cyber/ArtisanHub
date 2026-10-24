@@ -200,8 +200,8 @@ footer a{color:#5B6478}
   <label class="opt" style="margin-top:14px"><input type="checkbox" id="mAvail" checked> <span>I am available for new work (untick when you are busy)</span></label>
   <div style="margin-top:12px"><button type="button" id="mLoc" class="btn sm ghost">📍 Save my approximate location</button> <span id="mLocT" class="mute"></span></div>
   <p class="mute" style="margin:4px 0 0">Only an approximate spot (about 1 km) is saved for "near me" search, never your exact address.</p>
-  <label>Photos of your past work (up to 4)</label>
-  <div id="mPh"></div><input id="mPhIn" type="file" accept="image/*" style="margin-top:8px"><p id="mPhNote" class="mute" style="margin:4px 0 0"></p>
+  <label>Photos of your past work (up to 4, you can choose several at once)</label>
+  <div id="mPh"></div><input id="mPhIn" type="file" accept="image/*" multiple style="margin-top:8px"><p id="mPhNote" class="mute" style="margin:4px 0 0"></p>
   <label class="opt" style="margin-top:14px"><input type="checkbox" id="mCalls" checked> <span>Allow phone calls (untick for WhatsApp messages only)</span></label>
   <button id="mSave" class="btn sun">Save profile</button>
   <button id="mDel" class="btn ghost" style="color:var(--bad);border-color:var(--bad);margin-bottom:24px">Delete my profile</button>
@@ -213,7 +213,7 @@ footer a{color:#5B6478}
  <div id="fdList"></div>
  <button id="fdMore" class="btn ghost hide" type="button" style="width:100%;margin-top:10px">Load more</button>
 </section>
-<section id="adm" class="hide"><h2 style="margin:6px 0 8px">Overview</h2><div id="admStats"></div><h2 style="margin:18px 0 4px">Verification requests</h2><div id="admVer"></div><h2 style="margin:18px 0 4px">Reports</h2><div id="admList"></div></section>
+<section id="adm" class="hide"><h2 style="margin:6px 0 8px">Overview</h2><div id="admStats"></div><h2 style="margin:18px 0 8px">Open jobs</h2><div id="admJobs"></div><h2 style="margin:18px 0 4px">Verification requests</h2><div id="admVer"></div><h2 style="margin:18px 0 4px">Reports</h2><div id="admList"></div></section>
 </main>
 <footer class="wrap mute" style="text-align:center;padding-bottom:28px"><a href="#" data-doc="about">About</a> · <a href="#" data-doc="terms">Terms</a> · <a href="#" data-doc="privacy">Privacy</a> · <a href="#" data-doc="safety">Safety</a><br><small>© 2026 ArtisanHub NG · A B!g Raps™ Product</small></footer></div>
 <div id="vf" class="sheet hide"><div>
@@ -291,7 +291,7 @@ $('authBtn').onclick=async()=>{
   if(r.error){const m=r.error.message||'';return toast(/already registered/i.test(m)?'This email already has an account. Tap Log in, or use Forgot password if you do not remember it.':/invalid login/i.test(m)?'Wrong email or password. Tap Show to check it, or use Forgot password.':m,1)}
   if(!r.data.session)return toast('Check your email to confirm your account, then log in.');
   start(r.data.session.user)};
-$('nOut').onclick=async()=>{try{const r=await navigator.serviceWorker.ready,x=await r.pushManager.getSubscription();if(x)await sb.rpc('remove_push_sub',{p_endpoint:x.endpoint})}catch(e){}await sb.auth.signOut();location.reload()};
+$('nOut').onclick=async()=>{clearDraft();try{const r=await navigator.serviceWorker.ready,x=await r.pushManager.getSubscription();if(x)await sb.rpc('remove_push_sub',{p_endpoint:x.endpoint})}catch(e){}await sb.auth.signOut();location.reload()};
 
 /* ---- screens ---- */
 function view(v){try{sessionStorage.setItem('ah_v',v)}catch(e){}['home','find','jobs','feed','prof','me','adm'].forEach(k=>$(k).classList.toggle('hide',v!==k));[['nFind','find'],['nJobs','jobs'],['nFeed','feed'],['nAdm','adm']].forEach(([n,k])=>$(n).classList.toggle('on',v===k));$('nMe').classList.toggle('on',v==='me'||v==='prof');scrollTo(0,0);if(v==='feed'){fdBox();loadFeed(true)}}
@@ -375,7 +375,7 @@ $('mSave').onclick=async()=>{
     step='address';const a=await sb.from('private_details').upsert({user_id:uid,home_address:addr});if(a.error)throw a.error;
     step='skills';const d=await sb.from('profile_skills').delete().eq('profile_id',uid);if(d.error)throw d.error;
     const s=await sb.from('profile_skills').insert(skills.map(x=>({profile_id:uid,...x})));if(s.error)throw s.error;
-    paintAv();toast(myLoc?'Profile saved.':'Profile saved. Allow location access so people near you can find you.');showProf();search();
+    paintAv();clearDraft();toast(myLoc?'Profile saved.':'Profile saved. Allow location access so people near you can find you.');showProf();search();
   }catch(e){if(e.code==='23505')uSuggest();toast(e.code==='23505'?'That username is taken. Tap one of the suggestions below.':'Could not save ('+step+'): '+(e.message||'try again'),1)}
   $('mSave').disabled=false};
 
@@ -471,7 +471,7 @@ $('rpX').onclick=()=>$('rp').classList.add('hide');
 $('rpGo').onclick=async()=>{const r=await sb.rpc('report_profile',{p_id:rpId,p_reason:$('rpWhy').value,p_details:$('rpTxt').value.trim()||null});
   if(r.error)return toast(/too many/i.test(r.error.message)?'Too many reports. Please try again later.':'Could not send the report. Try again.',1);
   $('rp').classList.add('hide');toast('Thank you. We will review this profile.')};
-const DOCS={ safety:`<h3>Safety tips</h3><p>ArtisanHub NG connects you with artisans. We do not employ them, handle payment or guarantee any job, so please protect yourself.</p><p><b>Before you hire</b></p><p>Look for the Verified badge, check the photos of past work, and read the reviews. Call and talk first. For bigger jobs, ask for the artisan's shop or address and for two people who can vouch for them. Compare two or more prices.</p><p><b>Agree the work and the price</b></p><p>Agree what will be done, the price, who buys the materials, and the timeline before work starts. Put it in a message so both sides have a record. Do not pay everything upfront. Pay a part for materials, and the balance after you have checked the work.</p><p><b>At your home</b></p><p>Tell someone the artisan is coming. Stay around, or have someone with you. Keep valuables out of sight, and never share a door code or keys.</p><p><b>Warning signs</b></p><p>Asking for full payment first. Pressure to decide quickly. Refusing to show past work. Anyone asking you to pay to "register" or "get" a job. Strange links, or messages asking you to leave the app straight away.</p><p><b>If you are an artisan</b></p><p>Agree the price in writing before you start. Never pay anyone who promises you jobs on ArtisanHub NG. Do not share your password with anyone, including people who say they work for us.</p><p><b>Report a problem</b></p><p>Use Report on a profile or a post, or contact us through Help in the menu. If you are in danger, or a crime has happened, contact the police.</p>`,
+const DOCS={ safety:`<h3>Safety tips</h3><p>ArtisanHub NG connects you with artisans. We do not employ them, handle payment or guarantee any job, so please protect yourself.</p><p><b>Before you hire</b></p><p>Look for the Verified badge, check the photos of past work, and read the reviews. Reviews are written by signed-in users, and we cannot confirm that a job took place, so look at the photos and the number of reviews too. Call and talk first. For bigger jobs, ask for the artisan's shop or address and for two people who can vouch for them. Compare two or more prices.</p><p><b>Agree the work and the price</b></p><p>Agree what will be done, the price, who buys the materials, and the timeline before work starts. Put it in a message so both sides have a record. Do not pay everything upfront. Pay a part for materials, and the balance after you have checked the work.</p><p><b>At your home</b></p><p>Tell someone the artisan is coming. Stay around, or have someone with you. Keep valuables out of sight, and never share a door code or keys.</p><p><b>Warning signs</b></p><p>Asking for full payment first. Pressure to decide quickly. Refusing to show past work. Anyone asking you to pay to "register" or "get" a job. Strange links, or messages asking you to leave the app straight away.</p><p><b>If you are an artisan</b></p><p>Agree the price in writing before you start. Never pay anyone who promises you jobs on ArtisanHub NG. Do not share your password with anyone, including people who say they work for us.</p><p><b>Report a problem</b></p><p>Use Report on a profile or a post, or contact us through Help in the menu. If you are in danger, or a crime has happened, contact the police.</p>`,
  about:`<h3>About ArtisanHub NG</h3><p>ArtisanHub NG helps people in Nigeria find skilled workers near them, and helps artisans get found for the work they do. Customers search, contact artisans and post jobs for free.</p><p>We connect people only. We do not employ artisans or handle payments.</p>`,
 terms:`<h3>Terms of use</h3>
 <p>ArtisanHub NG helps people find skilled workers (artisans) near them. We only connect people. We do not employ artisans, guarantee their work, or handle payments. Agree the job, price and payment directly, and carefully.</p>
@@ -506,11 +506,15 @@ async function loadPh(){const r=await sb.from('work_photos').select('id,url,path
 function paintPh(){$('mPh').innerHTML=myPh.map((x,i)=>`<span style="position:relative;display:inline-block;margin:6px 6px 0 0"><img src="${esc(x.url)}" alt="" style="width:76px;height:76px;object-fit:cover;border-radius:10px"><b data-pd="${i}" role="button" aria-label="Remove" style="position:absolute;top:-6px;right:-6px;background:#B3261E;color:#fff;border-radius:50%;width:22px;height:22px;display:grid;place-items:center;cursor:pointer">×</b></span>`).join('');
   $('mPhNote').textContent=hasProfile?(myPh.length>=4?'You have added 4 photos (the maximum).':''):'Save your profile first, then you can add work photos.';
   document.querySelectorAll('#mPh [data-pd]').forEach(b=>b.onclick=async()=>{const x=myPh[+b.dataset.pd];await sb.storage.from('work-photos').remove([x.path]);const d=await sb.from('work_photos').delete().eq('id',x.id);if(d.error)return toast('Could not remove.',1);loadPh()})}
-$('mPhIn').onchange=async()=>{const f=$('mPhIn').files[0];if(!f)return;if(!hasProfile)return toast('Save your profile first.',1);if(myPh.length>=4)return toast('Maximum 4 photos.',1);
-  try{const b=await shrink(f,1000),path=uid+'/'+Date.now()+'.jpg';const u=await sb.storage.from('work-photos').upload(path,b,{contentType:'image/jpeg'});if(u.error)throw u.error;
-    const url=sb.storage.from('work-photos').getPublicUrl(path).data.publicUrl;const i=await sb.from('work_photos').insert({profile_id:uid,url,path});if(i.error)throw i.error;
-    $('mPhIn').value='';toast('Photo added.');loadPh()}catch(e){toast('Could not add photo: '+(e.message||'try again'),1)}};
-async function loadAdm(){loadStats();loadVerQ();const l=$('admList');l.innerHTML='<p class="mute">Loading…</p>';const r=await sb.rpc('admin_reports');if(r.error)return l.innerHTML='<p class="mute">Not allowed.</p>';
+$('mPhIn').onchange=async()=>{const fl=[...$('mPhIn').files];if(!fl.length)return;if(!hasProfile){$('mPhIn').value='';return toast('Save your profile first.',1)}
+  const room=4-myPh.length;if(room<=0){$('mPhIn').value='';return toast('Maximum 4 photos. Remove one first.',1)}
+  const use=fl.slice(0,room);let ok=0;
+  for(let n=0;n<use.length;n++){toast('Uploading photo '+(n+1)+' of '+use.length+'...');
+    try{const b=await shrink(use[n],1000),path=uid+'/'+Date.now()+'-'+n+'.jpg';const u=await sb.storage.from('work-photos').upload(path,b,{contentType:'image/jpeg'});if(u.error)throw u.error;
+      const url=sb.storage.from('work-photos').getPublicUrl(path).data.publicUrl;const w=await sb.from('work_photos').insert({profile_id:uid,url,path});if(w.error)throw w.error;ok++}
+    catch(e){toast('Photo '+(n+1)+' failed: '+(e.message||'try again'),1);break}}
+  $('mPhIn').value='';if(ok)toast(ok+' photo'+(ok==1?'':'s')+' added'+(fl.length>room?'. Only 4 photos are allowed.':'.'));loadPh()};
+async function loadAdm(){loadStats();loadAdmJobs();loadVerQ();const l=$('admList');l.innerHTML='<p class="mute">Loading…</p>';const r=await sb.rpc('admin_reports');if(r.error)return l.innerHTML='<p class="mute">Not allowed.</p>';
   l.innerHTML=r.data.length?r.data.map((x,i)=>`<div class="card"><b>${esc(x.full_name||'(removed)')}</b> <span class="mute">· ${esc(x.reason)} · ${new Date(x.created_at).toLocaleDateString()}</span>${x.details?`<p style="margin:6px 0 0">${esc(x.details)}</p>`:''}<div class="row" style="margin-top:10px"><button class="btn sm ghost" data-ad="${x.id}">Dismiss</button><button class="btn sm" style="background:var(--bad)" data-ar="${i}">Remove profile</button><button class="btn sm" style="background:#6B1010;color:#fff" data-ab="${i}">Ban</button></div></div>`).join(''):'<p class="mute">No open reports.</p>';
   l.querySelectorAll('[data-ad]').forEach(b=>b.onclick=async()=>{await sb.rpc('admin_dismiss_report',{p_id:+b.dataset.ad});loadAdm()});
   l.querySelectorAll('[data-ab]').forEach(b=>b.onclick=async()=>{const x=r.data[+b.dataset.ab];if(!confirm('Ban '+x.full_name+'? This deletes their account and blocks their email from signing up again.'))return;const why=prompt('Reason for the ban (for your own record):','')||'';const d=await sb.rpc('admin_ban_user',{p_id:x.profile_id,p_reason:why.slice(0,200)});if(d.error)return toast(d.error.message,1);toast('Banned and email blocked.');loadAdm()});
@@ -527,7 +531,7 @@ sb.auth.onAuthStateChange(ev=>{if(ev==='PASSWORD_RECOVERY'){showAuth(false);$('p
 $('npwGo').onclick=async()=>{const p=$('npw').value;if(p.length<6)return toast('Use at least 6 characters.',1);
   const r=await sb.auth.updateUser({password:p});if(r.error)return toast(r.error.message,1);
   $('pw2').classList.add('hide');toast('Password changed. You are logged in.');history.replaceState(null,'',location.pathname)};
-function showEdit(){if(loadFail){toast('Could not load your profile. Check your connection and reopen the app.',1);return}$('whoNew').classList.toggle('hide',hasProfile);const h=hasProfile;$("meH").textContent=h?"Edit profile":"Create your profile";$("meBack").classList.toggle("hide",!h);$("meNote").textContent=h?"Update your details. Your full address stays private.":"Complete this to appear in search. Your full address stays private.";view("me")}
+function showEdit(){if(loadFail){toast('Could not load your profile. Check your connection and reopen the app.',1);return}$('whoNew').classList.toggle('hide',hasProfile);const h=hasProfile;$("meH").textContent=h?"Edit profile":"Create your profile";$("meBack").classList.toggle("hide",!h);$("meNote").textContent=h?"Update your details. Your full address stays private.":"Complete this to appear in search. Your full address stays private.";view("me");restoreDraft()}
 $("meBack").onclick=e=>{e.preventDefault();showProf()};$("pEdit").onclick=showEdit;
 async function showProf(){if(loadFail)return toast('Could not load your profile. Check your connection and reopen the app.',1);if(!hasProfile)return showEdit();view("prof");$("pAvail").checked=$("mAvail").checked;$("pCard").innerHTML="<p class=\"mute\">Loading...</p>";$("pTips").innerHTML="";
  const r=await sb.rpc("search_artisans",{p_id:uid}),p=(r.data||[])[0];if(r.error||!p){$("pCard").innerHTML="<div class=\"card\">Could not load your profile. Check your connection and try again.</div>";return}
@@ -720,10 +724,25 @@ $('mUser').addEventListener('input',()=>{const v=uClean($('mUser').value);if(v!=
 $('mName').addEventListener('blur',()=>{if(hasProfile)return;const t=uSuggest();if(!$('mUser').value&&t.length)$('mUser').value=t[0]});
 async function loadStats(){const b=$('admStats');b.innerHTML='<p class="mute">Loading...</p>';const r=await sb.rpc('admin_stats');if(r.error){b.innerHTML='';return}const d=r.data;
  b.innerHTML='<div class="sg">'+[['Artisans',d.artisans],['Verified',d.verified],['New this week',d.new_7d],['All accounts',d.accounts],['Waiting for verification',d.pending_verifications],['Open jobs',d.open_jobs],['Feed posts',d.posts],['Phones with alerts on',d.phones_alerts]].map(x=>'<div class="sc"><b>'+x[1]+'</b><small>'+x[0]+'</small></div>').join('')+'</div>'}
+async function loadAdmJobs(){const b=$('admJobs');b.innerHTML='<p class="mute">Loading...</p>';const r=await sb.rpc('admin_open_jobs');if(r.error){b.innerHTML='<p class="mute">Could not load jobs.</p>';return}
+ b.innerHTML=r.data.length?r.data.map(j=>'<div class="card" style="margin-bottom:10px"><b>'+esc(j.category)+' · '+esc(j.area)+'</b>'+(j.budget?' <span class="mute">· ₦'+Number(j.budget).toLocaleString('en-NG')+'</span>':'')+'<p style="margin:6px 0;overflow-wrap:anywhere">'+esc(j.description)+'</p><small class="mute">Posted by '+esc(j.email)+' · '+esc(String(j.created_at).slice(0,10))+' · '+j.responses+' response'+(j.responses==1?'':'s')+'</small><div style="margin-top:8px"><button class="btn sm ghost" data-jd="'+j.id+'" type="button" style="color:#B3261E">Delete job</button></div></div>').join(''):'<p class="mute">No open jobs.</p>';
+ b.querySelectorAll('[data-jd]').forEach(x=>x.onclick=async()=>{if(!confirm('Delete this job? It will also leave the feed.'))return;const w=await sb.rpc('admin_delete_job',{p_id:x.dataset.jd});if(w.error)return toast(w.error.message,1);toast('Deleted.');loadAdmJobs();loadStats()})}
+/* ---- form draft ---- */
+const DRAFT_IDS=['mName','mUser','mAge','mPhone','mState','mArea','mAddr','mBio','mYrs','mPrice','mWa','mOther'];
+const draftKey=()=>'ah_draft_'+(uid||'x');
+function saveDraft(){if(!uid||$('me').classList.contains('hide'))return;try{const d={ts:Date.now(),f:{},sk:skills,av:$('mAvail').checked,ca:$('mCalls').checked};DRAFT_IDS.forEach(i=>d.f[i]=$(i).value);localStorage.setItem(draftKey(),JSON.stringify(d))}catch(e){}}
+function clearDraft(){try{localStorage.removeItem(draftKey())}catch(e){}}
+function restoreDraft(){try{const d=JSON.parse(localStorage.getItem(draftKey())||'null');if(!d)return;if(Date.now()-d.ts>864e5){clearDraft();return}
+ DRAFT_IDS.forEach(i=>{if(d.f[i]!==undefined&&d.f[i]!=='')$(i).value=d.f[i]});
+ if(Array.isArray(d.sk)&&d.sk.length){skills.length=0;d.sk.forEach(x=>skills.push(x));paintSkills()}
+ $('mAvail').checked=!!d.av;$('mCalls').checked=!!d.ca;$('bioCt').textContent=$('mBio').value.length+' / 700';paintAv()}catch(e){}}
+let _dT=null;const _qd=()=>{clearTimeout(_dT);_dT=setTimeout(saveDraft,400)};
+$('me').addEventListener('input',_qd);$('me').addEventListener('change',_qd);$('me').addEventListener('click',()=>setTimeout(saveDraft,350));
+document.addEventListener('visibilitychange',()=>{if(document.hidden)saveDraft()});window.addEventListener('pagehide',saveDraft);
 const SV=(()=>{try{return[sessionStorage.getItem('ah_v'),sessionStorage.getItem('ah_j')]}catch(e){return[null,null]}})();
 async function autoNear(){try{const st=await navigator.permissions.query({name:'geolocation'});if(st.state==='granted'){nearLoc=await getLoc();$('nearHint').classList.add('hide')}}catch(e){}}
 (async()=>{await loadCats();nav(false);const GO=new URLSearchParams(location.search).get('go'),keep=(!focusId&&SV[0]&&SV[0]!=='home')?SV[0]:null;
-  const restore=()=>{if(keep==='jobs'){openJobs();if(uid&&SV[1]&&(SV[1]!=='for'||hasProfile))jtab(SV[1])}else if(keep==='prof'||keep==='me'){showProf()}else if(keep==='adm'){$('nAdm').onclick()}else if(keep==='feed'){view('feed')}else if(keep==='find'){view('find')}else{view('home')}};
+  const restore=()=>{if(keep==='jobs'){openJobs();if(uid&&SV[1]&&(SV[1]!=='for'||hasProfile))jtab(SV[1])}else if(keep==='me'){showEdit()}else if(keep==='prof'){showProf()}else if(keep==='adm'){$('nAdm').onclick()}else if(keep==='feed'){view('feed')}else if(keep==='find'){view('find')}else{view('home')}};
   view(focusId?'find':((keep==='find'||keep==='feed')?keep:'home'));await autoNear();search();
   if(GO==='feed')view('feed');const {data}=await sb.auth.getSession();
   if(data.session)start(data.session.user).then(()=>{if(!focusId&&!wantJobs){if(GO)goTo(GO);else restore();$('toast').className='hide'}if(GO)history.replaceState(null,'',location.pathname)});
