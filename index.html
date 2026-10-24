@@ -215,7 +215,7 @@ footer a{color:#5B6478}
 </section>
 <section id="adm" class="hide"><h2 style="margin:6px 0 8px">Overview</h2><div id="admStats"></div><h2 style="margin:18px 0 4px">Verification requests</h2><div id="admVer"></div><h2 style="margin:18px 0 4px">Reports</h2><div id="admList"></div></section>
 </main>
-<footer class="wrap mute" style="text-align:center;padding-bottom:28px"><a href="#" data-doc="about">About</a> · <a href="#" data-doc="terms">Terms</a> · <a href="#" data-doc="privacy">Privacy</a><br><small>© 2026 ArtisanHub NG · A B!g Raps™ Product</small></footer></div>
+<footer class="wrap mute" style="text-align:center;padding-bottom:28px"><a href="#" data-doc="about">About</a> · <a href="#" data-doc="terms">Terms</a> · <a href="#" data-doc="privacy">Privacy</a> · <a href="#" data-doc="safety">Safety</a><br><small>© 2026 ArtisanHub NG · A B!g Raps™ Product</small></footer></div>
 <div id="vf" class="sheet hide"><div>
   <h3>Get your Verified badge</h3>
   <p class="mute" style="margin:4px 0 0">Record a 20 to 30 second video. Show your FACE clearly in good light, say your name, your trade and your years of experience, and hold your valid ID close to the camera. We delete the video after we review it. You also need at least 2 photos of your work on your profile.</p>
@@ -257,7 +257,7 @@ footer a{color:#5B6478}
  <button class="mni" data-m="set">⚙ Settings</button>
  <button class="mni" data-m="inv">🔗 Invite a friend</button>
  <button class="mni" data-m="help">💬 Help on WhatsApp</button>
- <p class="mute" style="margin:10px 0"><a href="#" data-doc="terms">Terms</a> · <a href="#" data-doc="privacy">Privacy Policy</a></p>
+ <p class="mute" style="margin:10px 0"><a href="#" data-doc="terms">Terms</a> · <a href="#" data-doc="privacy">Privacy Policy</a> · <a href="#" data-doc="safety">Safety tips</a></p>
  <button class="mni" data-m="out">↪ Log out</button>
  <button id="mnX" class="btn ghost" type="button" style="margin-top:8px">Close</button></div></div>
 <div id="st" class="sheet hide"><div><h3>Settings</h3>
@@ -471,8 +471,8 @@ $('rpX').onclick=()=>$('rp').classList.add('hide');
 $('rpGo').onclick=async()=>{const r=await sb.rpc('report_profile',{p_id:rpId,p_reason:$('rpWhy').value,p_details:$('rpTxt').value.trim()||null});
   if(r.error)return toast(/too many/i.test(r.error.message)?'Too many reports. Please try again later.':'Could not send the report. Try again.',1);
   $('rp').classList.add('hide');toast('Thank you. We will review this profile.')};
-const DOCS={
-about:`<h3>About ArtisanHub NG</h3><p>ArtisanHub NG helps people in Nigeria find skilled workers near them, and helps artisans get found for the work they do. Customers search, contact artisans and post jobs for free.</p><p>We connect people only. We do not employ artisans or handle payments.</p>`,
+const DOCS={ safety:`<h3>Safety tips</h3><p>ArtisanHub NG connects you with artisans. We do not employ them, handle payment or guarantee any job, so please protect yourself.</p><p><b>Before you hire</b></p><p>Look for the Verified badge, check the photos of past work, and read the reviews. Call and talk first. For bigger jobs, ask for the artisan's shop or address and for two people who can vouch for them. Compare two or more prices.</p><p><b>Agree the work and the price</b></p><p>Agree what will be done, the price, who buys the materials, and the timeline before work starts. Put it in a message so both sides have a record. Do not pay everything upfront. Pay a part for materials, and the balance after you have checked the work.</p><p><b>At your home</b></p><p>Tell someone the artisan is coming. Stay around, or have someone with you. Keep valuables out of sight, and never share a door code or keys.</p><p><b>Warning signs</b></p><p>Asking for full payment first. Pressure to decide quickly. Refusing to show past work. Anyone asking you to pay to "register" or "get" a job. Strange links, or messages asking you to leave the app straight away.</p><p><b>If you are an artisan</b></p><p>Agree the price in writing before you start. Never pay anyone who promises you jobs on ArtisanHub NG. Do not share your password with anyone, including people who say they work for us.</p><p><b>Report a problem</b></p><p>Use Report on a profile or a post, or contact us through Help in the menu. If you are in danger, or a crime has happened, contact the police.</p>`,
+ about:`<h3>About ArtisanHub NG</h3><p>ArtisanHub NG helps people in Nigeria find skilled workers near them, and helps artisans get found for the work they do. Customers search, contact artisans and post jobs for free.</p><p>We connect people only. We do not employ artisans or handle payments.</p>`,
 terms:`<h3>Terms of use</h3>
 <p>ArtisanHub NG helps people find skilled workers (artisans) near them. We only connect people. We do not employ artisans, guarantee their work, or handle payments. Agree the job, price and payment directly, and carefully.</p>
 <p><b>Everyone:</b> be honest and respectful. No fake profiles, spam, harassment or illegal services. You must be 18 or older to create a profile or post a job.</p>
@@ -680,11 +680,12 @@ async function shareFeed(card){const t=card.querySelector('.fdb').textContent.sl
  try{await navigator.clipboard.writeText(t+' '+u);toast('Copied. Paste it in WhatsApp.')}catch(e){prompt('Copy this',u)}}
 function menuFeed(card,id){let m=card.querySelector('.fdm');if(m){m.remove();return}
  const adm=isAdminUser(),own=card.dataset.own==='1';
- card.insertAdjacentHTML('beforeend','<div class="fdm"><button data-k="rep">Report</button>'+(own||adm?'<button data-k="del">Delete</button>':'')+(adm?'<button data-k="pin">Pin / unpin</button><button data-k="ann">Alert artisans</button>':'')+'</div>');
+ card.insertAdjacentHTML('beforeend','<div class="fdm"><button data-k="rep">Report</button>'+(own||adm?'<button data-k="del">Delete</button>':'')+(adm?'<button data-k="pin">Pin / unpin</button><button data-k="ann">Alert artisans</button><button data-k="who">Who posted</button>':'')+'</div>');
  card.querySelector('.fdm').onclick=async e=>{const t=e.target.closest('button');if(!t)return;const k=t.dataset.k;
   if(k==='rep'){if(!uid)return needLogin();const r=await sb.rpc('feed_report',{p_post:id,p_comment:null});toast(r.error?r.error.message:'Thanks. We will review it.',!!r.error)}
   if(k==='del'){if(!confirm('Delete this post?'))return;const r=await sb.rpc('feed_delete_post',{p_id:id});if(r.error)return toast(r.error.message,1);card.remove();return}
   if(k==='pin'){const on=card.dataset.pin!=='1';const r=await sb.rpc('feed_pin',{p_post:id,p_pinned:on});if(r.error)return toast(r.error.message,1);toast(on?'Pinned.':'Unpinned.');loadFeed(true);return}
+  if(k==='who'){const r=await sb.rpc('admin_post_author',{p_post:id});if(r.error||!r.data)return toast(r.error?r.error.message:'Not found.',1);const d=r.data;alert('Name on the post: '+d.author_name+'\nEmail: '+d.email+'\nAccount created: '+String(d.account_created).slice(0,10)+'\nLast sign-in: '+String(d.last_sign_in||'').slice(0,10)+'\nHas an artisan profile: '+(d.has_profile?'Yes':'No'));return}
   if(k==='ann'){if(!confirm('Send an alert about this post to all artisans?'))return;const r=await sb.rpc('feed_announce',{p_post:id});toast(r.error?r.error.message:'Alert sent to '+r.data+' artisans.',!!r.error)}
   card.querySelector('.fdm').remove()}}
 $('fdList').onclick=async e=>{const b=e.target.closest('button[data-a]');if(!b)return;const card=b.closest('.fd'),id=+card.dataset.id,a=b.dataset.a;
